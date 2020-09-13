@@ -1,0 +1,187 @@
+﻿@{
+    ViewBag.Title = "订单汇总表";
+    ViewBag.PageUrl = "/BasicInfo/OrderView";
+    ViewBag.PageName = "订单列表";
+    ViewBag.OrderNum = '1';
+    Layout = "~/Views/Shared/_Master.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row" style="padding-bottom:10px">
+                    <div class="col-sm-4">
+                        <div class="dataTables_length" style="width:100%">
+                            <label id="rowNum">
+                                <span>显示&nbsp;</span>
+                                <select id="showRow" class="custom-select custom-select-sm form-control form-control-sm" style="width:70px" onchange="SelectRow(this)">
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                <span>&nbsp;行</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="dataTables_filter text-right" id="datatable-buttons_filter">
+                            <label>
+                                <input type="search" class="form-control form-control-sm" placeholder="搜索..." aria-controls="datatable-buttons" id="osearch" />
+                            </label>
+                            <button class="btn btn-secondary buttons-print" aria-controls="datatable-buttons" typeof="button" onclick="preview(1)">
+                                <span>打印</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!--startprint1-->
+                <div class="divHeader">
+                    <h3>Maverick公司 --- 订单汇总表</h3>
+                </div>
+                <table id="datatable-buttons" class="table dt-responsive nowrap table-hover table-sm" width="100%">
+                    <thead style="font-size:13px;">
+                        <tr>
+                            <th>#</th>
+                            <th>订单编号</th>
+                            <th>货物名称</th>
+                            <th>重量(总)</th>
+                            <th>体积(总)</th>
+                            <th>件数</th>
+                            <th>保价费</th>
+                            <th>起站</th>
+                            <th>目的地</th>
+                            <th>状态</th>
+                            <th class="print-hide">详情</th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody style="font-size:13px;">
+                        @{
+                            int counter = 1;
+                            foreach (var item in ViewBag.orderList)
+                            {
+                                var id = item.OrderId;
+                                var str = item.Status == "1" ? "<i class='mdi mdi-circle text-danger'/> 未处理" :
+                                    item.Status == "2" ? "<i class='mdi mdi-circle text-warning'/> 接货中" :
+                                    item.Status == "3" ? "<i class='mdi mdi-circle text-danger'/> 配货中" :
+                                    item.Status == "4" ? "<i class='mdi mdi-circle text-dark'/> 运输中" :
+                                    item.Status == "5" ? "<i class='mdi mdi-circle text-success'/> 配送中" :
+                                    "<i class='mdi mdi-circle text-complete'/> 已完成";
+                                <tr class="datarow">
+                                    <td>@counter</td>
+                                    <td>@id</td>
+                                    <td>@item.CargoName</td>
+                                    <td>@((Convert.ToDouble(item.CargoWeight) * Convert.ToInt32(item.UnitNUm)))</td>
+                                    <td>@(Convert.ToDouble(item.CargoVolume) * Convert.ToInt32(item.UnitNUm))</td>
+                                    <td>@item.UnitNUm</td>
+                                    <td>@item.InsuredValue</td>
+                                    <td>@item.SenderAddress</td>
+                                    <td>@item.ReceiverAddress</td>
+                                    <td>@Html.Raw(@str)</td>
+                                    <td class="print-hide"><span id="@id" onclick="GetDetails('@id')"><i class="mdi mdi-door-open" style="font-size:15px" /></span></td>
+                                </tr>
+                                ++counter;
+                            }
+                        }
+                    </tbody>
+                </table>
+                <!--endprint1-->
+                <div class="row">
+                    <div class="col-sm-12 text-right">
+                        <div class="dataTables_paginate paging_simple_numbers">
+                            <ul class="pagination pagination-rounded" id="pager">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section style{
+    <style>
+        .row {
+            width: 100% !important;
+        }
+
+        .pagination {
+            display: flex;
+            text-align: right;
+            flex-direction: row;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        i {
+            width: 20px;
+            transition: .3s;
+        }
+
+            i:hover {
+                cursor: pointer;
+                color: #2c8ef8;
+            }
+
+        .text-complete {
+            color: #727cf5;
+        }
+
+        .divHeader {
+            display: none;
+        }
+    </style>
+
+    <style media="print">
+        .print-hide {
+            display: none;
+        }
+
+        .divHeader {
+            display: block;
+            text-align: center;
+            top: 0;
+            padding-bottom: 20px;
+        }
+
+        tr {
+            display: table-row !important;
+        }
+    </style>
+}
+
+@section scripts{
+
+    @Scripts.Render("~/bundles/datatableToolJS")
+
+    <script>
+        window.onload = function () {
+            var pageCount = Math.ceil(Number('@ViewBag.DataCount') / PageSize)
+            InitData(pageCount)
+        }
+
+        function preview(oper) {
+            if (oper < 10) {
+                bdhtml = window.document.body.innerHTML;//获取当前页的html代码
+                sprnstr = "<!--startprint" + oper + "-->";//设置打印开始区域
+                eprnstr = "<!--endprint" + oper + "-->";//设置打印结束区域
+                prnhtml = bdhtml.substring(bdhtml.indexOf(sprnstr) + 18); //从开始代码向后取html
+                prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr));//从结束代码向前取html
+                window.document.body.innerHTML = prnhtml;
+                window.print();
+                window.document.body.innerHTML = bdhtml;
+            } else {
+                window.print();
+            }
+            location.reload()
+        }
+
+        function GetDetails(id) {
+            window.location.href = "/BasicInfo/BookingNote?id=" + encodeURI(id);
+        }
+    </script>
+
+}

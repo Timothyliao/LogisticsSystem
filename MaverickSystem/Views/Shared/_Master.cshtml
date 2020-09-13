@@ -1,0 +1,284 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Maverick</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="这里是Maverick物流信息系统." name="description" />
+    <meta content="廖佳苇" name="author" />
+    @Styles.Render("~/Content/jvectormap")
+    @Styles.Render("~/Content/icons")
+    @Styles.Render("~/Content/app")
+    @RenderSection("style", required: false)
+</head>
+
+<body>
+
+    <div class="navbar-custom topnav-navbar">
+        <div class="container-fluid">
+
+            <a href="/Staff/Index" class="topnav-logo">
+                <span class="topnav-logo-lg">
+                    <img src="~/assets/images/mylogo.png" alt="" height="35">
+                </span>
+            </a>
+
+            <ul class="list-unstyled topbar-right-menu float-right mb-0">
+
+
+
+
+                <li class="dropdown notification-list">
+                    <a class="nav-link dropdown-toggle nav-user arrow-none mr-0" data-toggle="dropdown" id="topbar-userdrop" href="#" role="button" aria-haspopup="true"
+                       aria-expanded="false">
+                        <span class="account-user-avatar">
+                            <img src="" id="ss1" alt="user-image" class="rounded-circle">
+                        </span>
+                        <span>
+                            <span class="account-user-name" id="name1"></span>
+                            <span class="account-position" id="pos"></span>
+                        </span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated topbar-dropdown-menu profile-dropdown" aria-labelledby="topbar-userdrop">
+                        <!-- item-->
+                        <div class=" dropdown-header noti-title">
+                            <h6 class="text-overflow m-0">Welcome !</h6>
+                        </div>
+
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item notify-item">
+                            <i class="mdi mdi-account-circle mr-1"></i>
+                            <span>我的账号</span>
+                        </a>
+
+                        <!-- item-->
+                        <a href="@Url.Action("Login","Staff")" class="dropdown-item notify-item">
+                            <i class="mdi mdi-logout mr-1"></i>
+                            <span>退出系统</span>
+                        </a>
+
+                    </div>
+                </li>
+
+            </ul>
+
+            <a class="button-menu-mobile disable-btn">
+                <div class="lines">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+
+    <div class="container-fluid" style="min-height:90vh !important">
+
+        <div class="wrapper" style="min-height:80vh !important">
+
+            <div class="left-side-menu">
+
+                <div class="leftbar-user">
+                    <a href="#">
+                        <img src="" id="ss2" alt="user-image" height="42" class="rounded-circle shadow-sm">
+                        <span class="leftbar-user-name" id="name2"></span>
+                    </a>
+                </div>
+
+                <ul class="metismenu side-nav">
+
+                    <li class="side-nav-title side-nav-item">导航</li>
+
+                    <!--职工管理-->
+                    <li class="side-nav-item">
+                        <a href="javascript: void(0);" class="side-nav-link">
+                            <i class="dripicons-retweet"></i>
+                            <span> 职工管理 </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul class="side-nav-second-level" aria-expanded="false">
+                            <li>
+                                <a href="@Url.Action("AddStaff","Admin")">添加新职工</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("ACCManagement","Admin")">职工账号管理</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("StaffDetil","Admin")">职工信息管理</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!--车辆管理-->
+                    <li class="side-nav-item">
+                        <a href="javascript: void(0);" class="side-nav-link">
+                            <i class="dripicons-retweet"></i>
+                            <span> 车辆管理 </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul class="side-nav-second-level" aria-expanded="false">
+                            <li>
+                                <a href="@Url.Action("CreateTruck","Admin")">添加新车辆</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("TruckView","Admin")">车辆信息管理</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!--网点管理-->
+                    <li class="side-nav-item">
+                        <a href="javascript: void(0);" class="side-nav-link">
+                            <i class="dripicons-retweet"></i>
+                            <span> 网点管理 </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul class="side-nav-second-level" aria-expanded="false">
+                            <li>
+                                <a href="@Url.Action("CreateWebsite","Admin")">添加新网点</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Website","BasicInfo")">网点信息管理</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!--业务管理-->
+                    <li class="side-nav-item">
+                        <a href="javascript: void(0);" class="side-nav-link">
+                            <i class="dripicons-retweet"></i>
+                            <span> 业务管理 </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul class="side-nav-second-level" aria-expanded="false">
+                            <li>
+                                <a href="@Url.Action("WayBill","Staff")">订单查询</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("OrderView","BasicInfo")">订单信息管理</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("GetGoods","Staff")" target="_blank">接货路径规划</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!--系统安全-->
+                    <li class="side-nav-item">
+                        <a href="javascript: void(0);" class="side-nav-link">
+                            <i class="dripicons-suitcase"></i>
+                            <span> 系统安全 </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul class="side-nav-second-level" aria-expanded="false">
+                            <li>
+                                <a href="javascript: void(0);" aria-expanded="false">
+                                    日志管理
+                                    <span class="menu-arrow"></span>
+                                </a>
+                                <ul class="side-nav-third-level" aria-expanded="false">
+                                    <li>
+                                        <a href="@Url.Action("AccLOg","Admin")">账号操作日志</a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("WebsiteLOg","Admin")">网点操作日志</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <div class="content-page">
+                <div class="content">
+
+                    <div class="row" id="otitle">
+                        <div class="col-12">
+                            <div class="page-title-box">
+                                <div class="page-title-right">
+                                    <ol class="breadcrumb m-0" id="crumbsBar">
+                                    </ol>
+                                </div>
+                                <h4 class="page-title">@ViewBag.Title</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        @RenderBody()
+                    </div>
+
+                </div>
+
+                <footer class="footer">
+                    <div class="row">
+                        <div class="col-md-6">
+                            2019 - 2020 © 廖佳苇 - 1692932745@qq.com
+                        </div>
+                    </div>
+                </footer>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="rightbar-overlay"></div>
+
+    @Scripts.Render("~/bundles/appJS")
+    @Scripts.Render("~/bundles/jvectormapJS")
+    @Scripts.Render("~/bundles/jvectormapWordJS")
+    @Scripts.Render("~/bundles/dashboard")
+
+
+
+    <script>
+        window.onload = function () {
+            let strCookie = document.cookie;
+            let mess = new Array();
+            let arrCookie = strCookie.split("; ");
+            for (var i = 0; i < arrCookie.length; i++) {
+                var arr = arrCookie[i].split("=");
+                switch (arr[0]) {
+                    case "Position": mess[0] = arr[1]; break;
+                    case "name": mess[1] = arr[1]; break;
+                    case "img": mess[2] = arr[1]; break;
+                }
+            }
+            document.getElementById('ss1').src = "/assets/images/users/" + mess[2]
+            document.getElementById('ss2').src = "/assets/images/users/" + mess[2]
+            document.getElementById('name1').innerHTML = mess[1]
+            document.getElementById('name2').innerHTML = mess[1]
+            document.getElementById('pos').innerHTML = mess[0]
+        }
+    </script>
+
+    <script>
+        var url = '@ViewBag.PageUrl'
+        var page = '@ViewBag.PageName'
+        var orderNum = '@ViewBag.OrderNum'
+        localStorage.setItem(orderNum, page + '-' + url)
+        var str = ''
+        for (var i = 1; i <= Number(orderNum); i++) {
+            var v = localStorage.getItem(i.toString()).split('-')
+            if (v != null) {
+                if (i.toString() == orderNum)
+                    str += '<li class="breadcrumb-item active" id=' + orderNum + '><a href=' + v[1] + '>' + v[0] + '</a></li>'
+                else
+                    str += '<li class="breadcrumb-item" id=' + orderNum + '><a href=' + v[1] + '>' + v[0] + '</a></li>'
+            }
+        }
+        $('#crumbsBar').append(str)
+    </script>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+
+

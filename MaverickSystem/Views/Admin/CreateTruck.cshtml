@@ -1,0 +1,241 @@
+﻿@model MaverickSystem.Models.TruckViewModel
+
+@{
+    ViewBag.Title = "添加车辆";
+    Layout = "~/Views/Shared/_Master.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title">添加车辆信息</h4>
+                    <small>带<code class="text-danger">&nbsp;*&nbsp;</code>的为必填项</small>
+                    <div class="form-horizontal" style="margin-top:15px">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                @Html.LabelFor(model => model.Price)
+                                <div>
+                                    @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                @Html.LabelFor(model => model.TruckModel)
+                                <div>
+                                    @Html.EditorFor(model => model.TruckModel, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.TruckModel, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                @Html.LabelFor(model => model.TruckType)
+                                <div>
+                                    <select name="TruckType" class="custom-select">
+                                        <option value="仓栅载货车">仓栅载货车</option>
+                                        <option value="厢式载货车">厢式载货车</option>
+                                        <option value="载货车">载货车</option>
+                                        <option value="牵引车">牵引车</option>
+                                        <option value="挂车">挂车</option>
+                                        <option value="其他">其他</option>
+                                    </select>
+                                    @Html.ValidationMessageFor(model => model.TruckType, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                @Html.LabelFor(model => model.TruckClass)
+                                <div>
+                                    <select name="TruckClass" class="custom-select">
+                                        <option value="0">普通货车</option>
+                                        <option value="1">纯电动货车</option>
+                                        <option value="2">插电混动货车</option>
+                                    </select>
+                                    @Html.ValidationMessageFor(model => model.TruckClass, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                @Html.LabelFor(model => model.Wheelbase)
+                                <div>
+                                    @Html.EditorFor(model => model.Wheelbase, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Wheelbase, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                @Html.LabelFor(model => model.AxlesNum)
+                                <div>
+                                    @Html.EditorFor(model => model.AxlesNum, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.AxlesNum, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                @Html.LabelFor(model => model.TruckLength)
+                                <div>
+                                    @Html.EditorFor(model => model.TruckLength, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.TruckLength, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                @Html.LabelFor(model => model.TruckWidth)
+                                <div>
+                                    @Html.EditorFor(model => model.TruckWidth, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.TruckWidth, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                @Html.LabelFor(model => model.TruckHeight)
+                                <div>
+                                    @Html.EditorFor(model => model.TruckHeight, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.TruckHeight, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                @Html.LabelFor(model => model.TruckWeight)
+                                <div>
+                                    @Html.EditorFor(model => model.TruckWeight, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.TruckWeight, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                @Html.LabelFor(model => model.Load)
+                                <div>
+                                    @Html.EditorFor(model => model.Load, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Load, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                @Html.LabelFor(model => model.TotalWeight)
+                                <div>
+                                    @Html.EditorFor(model => model.TotalWeight, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.TotalWeight, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                @Html.LabelFor(model => model.CarrierNum)
+                                <div>
+                                    @Html.EditorFor(model => model.CarrierNum, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.CarrierNum, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                @Html.LabelFor(model => model.Exhaust)
+                                <div>
+                                    <select name="Exhaust" class="custom-select">
+                                        <option value="国三">国三</option>
+                                        <option value="国四">国四</option>
+                                        <option value="国五" selected>国五</option>
+                                        <option value="国六">国六</option>
+                                    </select>
+                                    @Html.ValidationMessageFor(model => model.Exhaust, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                @Html.LabelFor(model => model.LicencePlate)
+                                <div>
+                                    @Html.EditorFor(model => model.LicencePlate, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.LicencePlate, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                @Html.LabelFor(model => model.PlateProvince)
+                                <div>
+                                    @Html.EditorFor(model => model.PlateProvince, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.PlateProvince, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                @Html.LabelFor(model => model.ContainerType)
+                                <div>
+                                    <select name="ContainerType" class="custom-select">
+                                        <option value="仓栅式">仓栅式</option>
+                                        <option value="栏板式">栏板式</option>
+                                        <option value="厢式">厢式</option>
+                                        <option value="其他">其他</option>
+                                    </select>
+                                    @Html.ValidationMessageFor(model => model.ContainerType, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                @Html.LabelFor(model => model.ContainerLength)
+                                <div>
+                                    @Html.EditorFor(model => model.ContainerLength, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.ContainerLength, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                @Html.LabelFor(model => model.ContainerWidth)
+                                <div>
+                                    @Html.EditorFor(model => model.ContainerWidth, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.ContainerWidth, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                @Html.LabelFor(model => model.ContainerHeight)
+                                <div>
+                                    @Html.EditorFor(model => model.ContainerHeight, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.ContainerHeight, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label>* 所属网点</label>
+                                <div>
+                                    <select name="Affiliation" class="custom-select">
+                                        @foreach (var key in ViewBag.Keys)
+                                        {
+                                            <option value="@key">@ViewBag.Websites[key]</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <div>
+                                    <input type="submit" value="创  建" class="btn btn-primary" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section style{
+    <style>
+        form {
+            width: 100%;
+        }
+
+        label {
+            font-size: 12px;
+        }
+    </style>
+}

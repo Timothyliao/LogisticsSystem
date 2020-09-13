@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "数据库备份";
+    Layout = "~/Views/Shared/_Master.cshtml";
+}
+
+<div class="row" style="width:100% !important;">
+    <div class="col-lg-12">
+        <form class="form-horizontal" action="/Admin/DBBackuP" method="post">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="dbPath">备份路径</label>
+                        <input name="dbPath" id="dbPath" placeholder="默认为 D:\01\test\LogisticsSystem.Bak" class="form-control" />
+                    </div>
+                    <button type="submit" class="btn btn-primary">创建备份</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

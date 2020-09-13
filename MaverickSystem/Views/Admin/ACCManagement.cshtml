@@ -1,0 +1,181 @@
+﻿@model List<LogisticsSystem.DTO.StaffSimpleInfoDto>
+
+@{
+    ViewBag.Title = "账号管理";
+    ViewBag.PageUrl = "/Admin/ACCManagement";
+    ViewBag.PageName = "账号维护";
+    ViewBag.OrderNum = '1';
+    Layout = "~/Views/Shared/_Master.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row" style="padding-bottom:10px">
+                    <div class="col-sm-4">
+                        <div class="dataTables_length" style="width:100%">
+                            <label id="rowNum">
+                                <span>显示&nbsp;</span>
+                                <select id="showRow" class="custom-select custom-select-sm form-control form-control-sm" style="width:70px" onchange="SelectRow(this)">
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                <span>&nbsp;行</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="dataTables_filter text-right" id="datatable-buttons_filter">
+                            <label>
+                                <input type="search" class="form-control form-control-sm" placeholder="搜索..." aria-controls="datatable-buttons" id="osearch" />
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <table id="datatable-buttons" class="table dt-responsive nowrap table-hover table-sm" width="100%">
+                    <thead style="font-size:13px;">
+                        <tr>
+                            <th>#</th>
+                            <th>姓名</th>
+                            <th>账号</th>
+                            <th>Email</th>
+                            <th>账号状态</th>
+                            <th class="print-hide">操作</th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody style="font-size:13px;">
+                        @{
+                            int counter = 1;
+                            foreach (var item in Model)
+                            {
+                                string statusCss = item.Status ? "text-info" : "text-danger";
+                                string status = item.Status ? "已激活" : "已冻结";
+                                <tr class="datarow">
+                                    <td>@counter</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.Tel</td>
+                                    <td>@item.Email</td>
+                                    <td class="@statusCss">@Html.Raw(status)</td>
+                                    <td class="print-hide">
+                                        @if (ViewBag.HasPower == "1")
+                                        {
+                                            <a id="@item.Id" class="btn btn-info mdi mdi-account-details" style="color:white;cursor:pointer;font-size:13px;padding:1px 5px">详情</a>
+                                        }
+                                        @if (item.Status)
+                                        {
+                                            <a id="@string.Format("{0}",item.Id)" class="btn btn-warning mdi mdi-account-remove opbtn" data-toggle="modal" data-target="#info-alert-modal" onclick="SetId(this)">冻结</a>
+                                        }
+                                        else
+                                        {
+                                            <a id="@string.Format("{0}",item.Id)" class="btn btn-danger mdi mdi-account-key opbtn" data-toggle="modal" data-target="#info-alert-modal" onclick="SetId(this)">激活</a>
+                                        }
+                                    </td>
+                                </tr>
+                                ++counter;
+                            }
+                        }
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col-sm-12 text-right">
+                        <div class="dataTables_paginate paging_simple_numbers">
+                            <ul class="pagination pagination-rounded" id="pager">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="info-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body p-4">
+                <div class="text-center">
+                    <i class="dripicons-information h1 text-info"></i>
+                    <h4 class="mt-2">提 示</h4>
+                    <p class="mt-3">请确认您的操作！</p>
+                    <button type="button" class="btn btn-info my-2" data-dismiss="modal" onclick="ChangeStatus()">确 认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section style{
+    <style>
+        .row {
+            width: 100% !important;
+        }
+
+        .pagination {
+            display: flex;
+            text-align: right;
+            flex-direction: row;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        i {
+            width: 20px;
+            transition: .3s;
+        }
+
+            i:hover {
+                cursor: pointer;
+                color: #2c8ef8;
+            }
+
+        .text-complete {
+            color: #727cf5;
+        }
+
+        .opbtn {
+            color: white !important;
+            cursor: pointer;
+            font-size: 13px;
+            padding: 1px 5px;
+        }
+    </style>
+}
+
+@section scripts{
+
+    @Scripts.Render("~/bundles/datatableToolJS")
+
+    <script>
+        window.onload = function () {
+            var pageCount = Math.ceil(Number('@ViewBag.DataCount') / PageSize)
+            InitData(pageCount)
+        }
+
+        function SetId(op) {
+            var id = $(op).attr('id')
+            sessionStorage.setItem("_OMAID",id)
+        }
+
+        function ChangeStatus() {
+            var id = sessionStorage.getItem("_OMAID")
+            $.ajax({
+                url: "/Admin/ChangeAccStatus",
+                type: "post",
+                data: {"acc" : id},
+                success: (data) => {
+                    if (data.status == "complete") {
+                        location.reload()
+                    }
+                    else
+                        alert("失败")
+                }
+            })
+        }
+    </script>
+
+}

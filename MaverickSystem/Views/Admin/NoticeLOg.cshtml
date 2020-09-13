@@ -1,0 +1,126 @@
+﻿@model List<LogisticsSystem.DTO.LogInfoDto>
+
+@{
+    ViewBag.Title = "文章操作日志";
+    Layout = "~/Views/Shared/_Master.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row" style="padding-bottom:10px">
+                    <div class="col-sm-4">
+                        <div class="dataTables_length" style="width:100%">
+                            <label id="rowNum">
+                                <span>显示&nbsp;</span>
+                                <select id="showRow" class="custom-select custom-select-sm form-control form-control-sm" style="width:70px" onchange="SelectRow(this)">
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                <span>&nbsp;行</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="dataTables_filter text-right" id="datatable-buttons_filter">
+                            <label>
+                                <input type="search" class="form-control form-control-sm" placeholder="搜索..." aria-controls="datatable-buttons" id="osearch" />
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <table id="datatable-buttons" class="table dt-responsive nowrap table-hover table-sm" width="100%">
+                    <thead style="font-size:13px;">
+                        <tr>
+                            <th>#</th>
+                            <th>时间</th>
+                            <th>操作人</th>
+                            <th>操作人部门</th>
+                            <th>被操作对象</th>
+                            <th>操作类型</th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody style="font-size:13px;">
+                        @{
+                            int counter = 1;
+                            foreach (var item in Model)
+                            {
+                                var type = item.ModifyType;
+                                var str = type == "1" ? "<i class='mdi mdi-circle text-success'/> 增加" :
+                                    type == "2" ? "<i class='mdi mdi-circle text-warning'/> 修改" :
+                                    type == "3" ? "<i class='mdi mdi-circle text-danger'/> 删除" :
+                                    "<i class='mdi mdi-circle text-complete'/> 查询";
+                                <tr>
+                                    <td>@counter</td>
+                                    <td>@(item.CreatTime.ToShortDateString() + " " + item.CreatTime.ToShortTimeString())</td>
+                                    <td>@item.Operator</td>
+                                    <td>@item.Section</td>
+                                    <td>@item.ModifyObj</td>
+                                    <td>@Html.Raw(@str)</td>
+                                </tr>
+                                ++counter;
+                            }
+                        }
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col-sm-12 text-right">
+                        <div class="dataTables_paginate paging_simple_numbers">
+                            <ul class="pagination pagination-rounded" id="pager">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section style{
+    <style>
+        .row {
+            width: 100% !important;
+        }
+
+        .pagination {
+            display: flex;
+            text-align: right;
+            flex-direction: row;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        i {
+            width: 20px;
+            transition: .3s;
+        }
+
+            i:hover {
+                cursor: pointer;
+                color: #2c8ef8;
+            }
+
+        .text-complete {
+            color: #727cf5;
+        }
+    </style>
+}
+
+@section scripts{
+
+    @Scripts.Render("~/bundles/datatableToolJS")
+
+    <script>
+        window.onload = function () {
+            var pageCount = Math.ceil(Number('@ViewBag.DataCount') / PageSize)
+            InitData(pageCount)
+        }
+    </script>
+}

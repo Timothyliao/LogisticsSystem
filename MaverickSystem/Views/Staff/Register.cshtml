@@ -1,0 +1,129 @@
+﻿@model MaverickSystem.Models.Front.RegisterViewModel
+
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_UserLogin.cshtml";
+}
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body" id="tips"></div>
+            <div class="modal-footer" style="border: none;">
+                <button type="button" class="btn btn-default" data-dismiss="modal">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="left">
+    <h1>修改密码</h1>
+    <p>Maverick零担物流公司管理系统</p>
+    <p id="time"></p>
+</div>
+<div class="right">
+    <div class="formBox">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="Account" id="acc" placeholder="请输入账号" onblur="onChange(acc)"
+                           onkeydown="Import(acc)" onkeyup="Delete(acc)" />
+                    <div class="input-group-btn">
+                        <button type="button" onclick="SendCode()" class="btn" id="authcode">
+                            <span class="spinner-border-sm mr-1" role="status" aria-hidden="true" id="spinner"></span>
+                            <span id="sendtips">发送验证码</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="tips" id="tip_acc">
+                    <span>请输入账号</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="text" name="Code" id="verifyCode" placeholder="验证码" onblur="onChange(verifyCode)" onkeydown="Import(verifyCode)"
+                       onkeyup="Delete(verifyCode)" />
+                <div class="tips" id="tip_verifyCode">
+                    <span>请输入验证码</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="password" name="OldPwd" id="pwd2" placeholder="新密码" onblur="onChange(pwd2)" onkeydown="Import(pwd2)"
+                       onkeyup="Delete(pwd2)" />
+                <div class="tips" id="tip_pwd2">
+                    <span>请输入新密码</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="password" name="NewPwd" id="surepwd" placeholder="确认新密码" onblur="PwdCompare(surepwd,pwd2)"
+                       onkeydown="PwdCompare(surepwd,pwd2)" onkeyup="PwdCompare(surepwd,pwd2)" />
+                <div class="tips" id="tip_surepwd">
+                    <span>两次密码不一致</span>
+                </div>
+            </div>
+            <div class="btnbox">
+                <button type="submit" class="btn" onclick="return CheckPwd()">确定修改</button>
+            </div>
+            <div class="form-group" id="register">
+                <small>
+                    <font color="slategray">返回登陆？</font>
+                    <a href="/Staff/Login">点击这里</a>
+                </small>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function SendCode() {
+            var tel = $('#acc').val()
+            if (tel == '') {
+                $('#tips').text('请先输入账号！')
+                $('#myModal').modal(); //运行模态框
+            } else {
+                $('#sendtips').html('处理中')
+                $('#spinner').addClass('spinner-border')
+                $.ajax({
+                    url: '/Staff/SendAuthCode?tel=' + tel,
+                    method: 'GET'
+                }).done((data) => {
+                    if (data.status == 'ok') {
+                        $('#tips').text('验证码已发送，有效期为90s，请登录邮箱查收！')
+                        $('#myModal').modal(); //运行模态框
+                        let time = 90
+                        let setTime = setInterval(function () {
+                            if (time >= 0) {
+                                $('#spinner').removeClass('spinner-border')
+                                $('#sendtips').html('剩余' + time + 's过期')
+                                --time
+                            } else {
+                                clearInterval(setTime)
+                                $('#sendtips').html('重新发送')
+                            }
+                        }, 1000)
+                    }
+                    else {
+                        $('#tips').text('似乎出了点状况，消息已丢失！')
+                        $('#sendtips').html('发送验证码')
+                        $('#spinner').removeClass('spinner-border')
+                        $('#myModal').modal(); //运行模态框
+                    }
+                })
+            }
+        }
+
+        function CheckPwd() {
+            if ($('#pwd2').val() == $('#surepwd').val())
+                return true
+            else {
+                $('#tips').text('Error，两次密码不一致！')
+                $('#myModal').modal(); //运行模态框
+                return false
+            }
+        }
+    </script>
+}

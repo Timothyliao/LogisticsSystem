@@ -1,0 +1,371 @@
+﻿@model MaverickSystem.Models.Front.TraceModel
+
+@{
+    ViewBag.Title = "CargoTrace";
+    Layout = "~/Views/Shared/_UserPage.cshtml";
+}
+
+
+
+
+<section class="faq-pg-section section-padding" style="padding-top: 100px;">
+    <div class="container order-box">
+        <div class="row">
+            <div style="padding:0px 30px;padding-left:88px">
+                <div class="form-horizontal">
+
+                    <div class="form-group">
+                        <div class="col-md-8">
+                            <input type="text" id="query_k_code" class="form-control" placeholder="请输入查询订单条码 ( 测试订单：962003101829189 )" />
+                        </div>
+                        <input type="button" id="query_k_cot" value="查询" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row datarow">
+            <div class="col-md-8">
+                <div class="order-detail">
+                    <div class="detail-title">
+                        <span class="indent">运件信息</span>
+                    </div>
+                    <div class="detail-content">
+                        <div class="maprow">
+                            <div id="omap"></div>
+                        </div>
+
+                        <div class="detail-panel">
+
+                            <div class="pannel-package">
+                                <div class="package-title">
+                                    <h3 class="title-text" id="pt_s"></h3>
+                                </div>
+                                <div class="package-status">
+                                    <ul class="status-list" id="query_k_st_aus">
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="pannel-order" id="p_ord">
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section myStyle{
+    <style>
+        .order-detail {
+            border: 1px solid #e2e2e2;
+            width: 990px;
+            margin: 0 auto;
+            font: 12px/1.5 tahoma,arial,"Hiragino Sans GB",simsun,sans-serif;
+            color: #333;
+        }
+
+            .order-detail .detail-title {
+                font-size: 16px;
+                background-color: #f7f7f7;
+                height: 38px;
+                line-height: 38px;
+                border-bottom: 1px solid #e2e2e2;
+                text-indent: 55px;
+                display: block;
+            }
+
+            .order-detail .detail-content {
+                padding: 0 58px;
+            }
+
+        .pannel-package {
+            background-color: #f3f3f3;
+            margin-bottom: 32px;
+            position: relative;
+            border-radius: 3px;
+        }
+
+        .pannel-order {
+            padding: 20px 0;
+            line-height: 24px;
+            border-top: 1px solid #e7e7e7;
+            font-size: 12px;
+        }
+
+            .pannel-order .label {
+                margin-left: 10px;
+                color: #333;
+            }
+
+        .panel-order .order-row {
+            margin-left: -10px;
+        }
+
+        #omap {
+            width: 100%;
+            height: 100%;
+        }
+
+        .maprow, .datarow {
+            height: 100%;
+            margin: auto;
+        }
+
+        .datarow {
+            margin-top: 20px;
+        }
+
+        .maprow {
+            height: 400px;
+            margin: 30px 0;
+        }
+
+        .detail-panel {
+            font: 12px/1.5 tahoma,arial,"Hiragino Sans GB",simsun,sans-serif;
+            color: #333;
+        }
+
+
+        .package-status {
+            padding: 0 10px;
+        }
+
+        .title-text {
+            font-weight: 400;
+            font-family: "Microsoft Yahei";
+            font-size: 16px;
+            margin: 0;
+            padding: 14px 0 14px 20px;
+        }
+
+        .status-list {
+            margin: 0;
+            padding: 0;
+            margin-left: 12px;
+            margin-top: 0px;
+            padding-left: 10px;
+            list-style: none;
+            font-size: 12px;
+        }
+
+            .status-list li {
+                border-left: 1px solid #bdc3c7;
+                height: auto;
+                min-height: 30px;
+                margin-bottom: -2px;
+                display: list-item;
+                text-align: -webkit-match-parent;
+            }
+
+            .status-list span {
+                font-size: 12px;
+            }
+
+            .status-list .date {
+                font-weight: 700;
+                margin-right: 8px;
+                width: 78px;
+            }
+
+            .status-list .time {
+                margin-right: 28px;
+                margin-left: 5px;
+                width: 48px;
+            }
+
+            .status-list .text {
+                display: inline-block;
+            }
+
+        .package-status {
+            padding: 18px 0 0 0;
+        }
+
+            .package-status .status-list li:before {
+                content: '';
+                border: 3px solid #34495e;
+                background-color: #34495e;
+                display: inline-block;
+                width: 5px;
+                height: 5px;
+                border-radius: 5px;
+                margin-left: -4px;
+                margin-right: 10px;
+            }
+
+            .package-status .status-list .latest:before {
+                background-color: #fd5e16;
+                border-color: #fd5e16;
+            }
+    </style>
+}
+
+@section myScript{
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=2e6c7ed51237b274c90ff217ea95e007"></script>
+    <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+
+    <script>
+        var mymap = new AMap.Map('omap', {
+            zoom: 6,  //设置地图显示的缩放级别
+            center: [116.397428, 39.90923],//设置地图中心点坐标
+            mapStyle: 'amap://styles/normal',  //设置地图的显示样式
+            viewMode: '2D',  //设置地图模式
+            isHotspot: false,//是否开启地图热点和标注的hover效果
+        });
+        AMap.plugin([
+            'AMap.ToolBar',
+            'AMap.Scale',
+        ], function () {
+            // 在图面添加工具条控件，工具条控件集成了缩放、平移、定位等功能按钮在内的组合控件
+            mymap.addControl(new AMap.ToolBar());
+
+            // 在图面添加比例尺控件，展示地图在当前层级和纬度下的比例尺
+            mymap.addControl(new AMap.Scale());
+        });
+
+
+        $("#query_k_cot").click(function () {
+            let v = $("#query_k_code").val();
+            if (v != null)
+                $.get("TraceInfo?cot=" + v,
+                    null,
+                    function (data) {
+                        var obj = JSON.parse(data);
+                        console.log(obj);
+
+                        //加载地图
+                        var pathArray = new Array()//序号-location
+                        pathArray.push(obj.SLocation);//起点
+                        pathArray.push(obj.TransLocation);//汽车位置
+                        pathArray.push(obj.RLocation);//终点
+
+                        if (!DrawPath(pathArray)) {
+                            console.log("error!");
+                        }
+
+                        //添加pakage_status
+                        $("#query_k_st_aus").html(""); //先清除
+                        let ps = "";
+                        for (var i = 0; i < obj.StatusList.length; i++) {
+                            if (i == obj.StatusList.length - 1)
+                                ps += "<li class='latest'><span class='date'>" + obj.StatusList[i].Data + "</span><span class='time'>" + obj.StatusList[i].Time + "</span><span class='text'>" + obj.StatusList[i].Mark + "</span></li>"
+                            else
+                                ps += "<li><span class='date'>" + obj.StatusList[i].Data + "</span><span class='time'>" + obj.StatusList[i].Time + "</span><span class='text'>" + obj.StatusList[i].Mark + "</span></li>"
+                        }
+                        $("#query_k_st_aus").html(ps);  //添加
+
+
+                        let om = "<div class='order-row'><label class='label'>运单号码：" + obj.Code + "</label><span class='em'></span></div>";
+                        om += "<div class='order-row'><label class='label'>寄方地址：</label > <span class='em'>" + obj.SFAddress + " " + obj.SSAddress + "&nbsp;&nbsp;&nbsp;&nbsp;</span>";
+                        om += "<span class='em'>" + obj.SName + "</span> <span class='em'>" + obj.STel + "</span></div > ";
+
+                        om += "<div class='order-row'><label class='label'>收方地址：</label > <span class='em'>" + obj.RFAddress + " " + obj.RSAddress + "&nbsp;&nbsp;&nbsp;&nbsp;</span>";
+                        om += "<span class='em'>" + obj.SName.substr(0, 1) + "</span> <span class='em'>" + obj.RTel.substr(0, 3) + "****" + obj.RTel.substr(7, 11) + "</span></div > ";
+
+                        $('#p_ord').html(""); $('#p_ord').html(om);
+
+                        var tps = "";
+                        switch (obj.OStatus) {
+                            case "1": tps = "未处理"; break;
+                            case "2": tps = "接货中"; break;
+                            case "3": tps = "运输中"; break;
+                            case "4": tps = "配送中"; break;
+                            case "5": tps = "已签收"; break;
+                            case "6": tps = "丢失"; break;
+                        }
+                        $("#pt_s").html(""); $("#pt_s").html(tps);
+
+
+                        
+                    })
+        })
+
+
+        function DrawPath(pathArray) {
+
+            var path = new Array() //路径数组
+            for (var i = 0; i < pathArray.length; i++) {
+                var longt = parseFloat(pathArray[i].split(',')[0])
+                var lat = parseFloat(pathArray[i].split(',')[1])
+                path.push({ lnglat: [longt, lat] })
+            }
+
+            var truckOptions = {
+                map: mymap,
+                policy: 9, // 规划策略
+                size: 3
+            }
+            var isSuccess = true
+
+            AMap.plugin('AMap.TruckDriving', function () {
+                var driving = new AMap.TruckDriving(truckOptions)
+                driving.search(path, function (status, result) {
+                    if (status === 'complete') {
+                        if (result.routes && result.routes.length) {
+                            //drawRoute(result.routes[0])
+                        }
+                    } else {
+                        console.log(result)
+                        isSuccess = false
+                    }
+                })
+            })
+
+            return isSuccess
+        }
+
+        function drawRoute(route) {
+            var path = parseRouteToPath(route)
+
+            var startMarker = new AMap.Marker({
+                position: path[0],
+                icon:"../UserAssets/img/icon/start.svg",
+                map: mymap
+            })
+
+            var endMarker = new AMap.Marker({
+                position: path[path.length - 1],
+                icon: 'https://webapi.amap.com/theme/v1.3/markers/n/end.png',
+                map: mymap
+            })
+
+            var routeLine = new AMap.Polyline({
+                path: path,
+                isOutline: true,
+                outlineColor: '#d81e06',
+                borderWeight: 1,
+                strokeWeight: 3,
+                strokeColor: '#d81e06',
+                lineJoin: 'round'
+            })
+
+            routeLine.setMap(mymap)
+
+            // 调整视野达到最佳显示区域
+            mymap.setFitView([startMarker, endMarker, routeLine])
+        }
+
+        function parseRouteToPath(route) {
+            var path = []
+
+            for (var i = 0, l = route.steps.length; i < l; i++) {
+                var step = route.steps[i]
+
+                for (var j = 0, n = step.path.length; j < n; j++) {
+                    path.push(step.path[j])
+                }
+            }
+            return path
+        }
+
+    </script>
+
+    <script type="text/javascript">
+
+    </script>
+}

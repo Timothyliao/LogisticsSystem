@@ -1,0 +1,505 @@
+﻿@model MaverickSystem.Models.Front.OrderViewModel
+
+@{
+    Layout = "~/Views/Shared/_UserPage.cshtml";
+}
+
+<section class="page-title" style="background-image:url(../UserAssets/img/lb//04.jpg);filter: blur(1px);">
+</section>
+
+
+<section class="faq-pg-section section-padding" style="padding-top: 0;">
+    <div class="container order-box">
+        <div class="row text-center" style="padding: 25px 0" />
+        <h3>Maverick在线下单</h3>
+    </div>
+    <div class="row">
+        <div class="order">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+
+                    <div class="sender-wrapper">
+                        <div class="maverickTitle">
+                            寄方信息
+                            <span class="small">标 * 号为必填项</span>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-xs-5">
+                                <label class="control-label required" for="SenderName">姓名</label>
+                                <input type="text" name="SenderName" onkeydown="ClearTips('SenderName')" class="mavInput" placeholder="请填写联系人姓名" />
+                                <span class="tips tip-SenderName hide">此项为必填项</span>
+                            </div>
+                            <div class="col-xs-5 col-xs-offset-2">
+                                <label class="control-label" for="SCompany">公司名称</label>
+                                <input type="text" name="SCompany" class="mavInput" placeholder="请填写公司名称" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-xs-5">
+                                <label class="control-label required" for="SMobliePhone">手机号码</label>
+                                <input type="text" name="SMobliePhone" onkeydown="ClearTips('SMobliePhone')" class="mavInput" placeholder="请填写手机号码" />
+                                <span class="tips tip-SMobliePhone hide">此项为必填项</span>
+                            </div>
+                            <div class="col-xs-5 col-xs-offset-2">
+                                <label class="control-label" for="STelPhone">固话</label>
+                                <input type="text" name="STelPhone" class="mavInput" placeholder="请填写固定电话" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-xs-10">
+                                <div class="a">
+                                    <label class="control-label required" for="SLocation">省市区</label>
+                                    <div class="pick-area pick-area1" id="sSLocation" style="width:100% !important;"></div>
+                                    <input id="SLocation" name="SLocation" onkeydown="ClearTips('SLocation')" hidden value="湖南省 衡阳市 蒸湘区" />
+                                    <span class="tips tip-sSLocation hide">此项为必填项</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-xs-10">
+                                <label class="control-label required" for="SAddress">详细地址</label>
+                                <input type="text" name="SAddress" id="SAddress" onkeydown="ClearTips('SAddress')" class="mavInput" placeholder="请填写所在街道以及详细地址" />
+                                <span class="tips tip-SAddress hide">此项为必填项</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="receiver-wrapper">
+                        <div class="maverickTitle">
+                            收方信息
+                            <span class="small">标 * 号为必填项</span>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-5">
+                                <label class="control-label required" for="ReceiverName">姓名</label>
+                                <input type="text" name="ReceiverName" onkeydown="ClearTips('ReceiverName')" class="mavInput" placeholder="请填写联系人姓名" />
+                                <span class="tips tip-ReceiverName hide">此项为必填项</span>
+                            </div>
+                            <div class="col-xs-5 col-xs-offset-2">
+                                <label class="control-label" for="RCompany">公司名称</label>
+                                <input type="text" name="RCompany" class="mavInput" placeholder="请填写公司名称" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-5">
+                                <label class="control-label required" for="RMobliePhone">手机号码</label>
+                                <input type="text" name="RMobliePhone" onkeydown="ClearTips('RMobliePhone')" class="mavInput" placeholder="请填写手机号码" />
+                                <span class="tips tip-RMobliePhone hide">此项为必填项</span>
+                            </div>
+                            <div class="col-xs-5 col-xs-offset-2">
+                                <label class="control-label" for="RTelPhone">固话</label>
+                                <input type="text" name="RTelPhone" class="mavInput" placeholder="请填写固定电话" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-10">
+                                <div class="a">
+                                    <label class="control-label required" for="RLocation">省市区</label>
+                                    <div class="pick-area pick-area1" id="sRLocation" style="width:100% !important;"></div>
+                                    <input id="RLocation" name="RLocation" onkeydown="ClearTips('RLocation')" hidden value="湖南省 衡阳市 蒸湘区" />
+                                    <span class="tips tip-sRLocation hide">此项为必填项</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-10">
+                                <label class="control-label required" for="RAddress">详细地址</label>
+                                <input type="text" name="RAddress" onkeydown="ClearTips('RAddress')" class="mavInput" placeholder="请填写所在街道以及详细地址" />
+                                <span class="tips tip-RAddress hide">此项为必填项</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cargo-wrapper">
+                        <div class="maverickTitle">
+                            货物信息
+                            <span class="small">标 * 号为必填项</span>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-5">
+                                <label class="control-label required" for="CargoName">货物名称</label>
+                                <input type="text" name="CargoName" onkeydown="ClearTips('CargoName')" class="mavInput" placeholder="请填写货物名称" />
+                                <span class="tips tip-CargoName hide">此项为必填项</span>
+                            </div>
+                            <div class="col-xs-5 col-xs-offset-2">
+                                <label class="control-label required" for="CargoWeight">单件货物重量( kg )</label>
+                                <input type="text" name="CargoWeight" onkeydown="ClearTips('CargoWeight')" class="mavInput" value="20" />
+                                <span class="tips tip-CargoWeight hide">此项为必填项</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-5">
+                                <label class="control-label required" for="CargoUnit">货物件数( 件 )</label>
+                                <input type="text" name="CargoUnit" onkeydown="ClearTips('CargoUnit')" class="mavInput" value="1" />
+                                <span class="tips tip-CargoUnit hide">此项为必填项</span>
+                            </div>
+                            <div class="col-xs-5 col-xs-offset-2">
+                                <label class="control-label" for="CargoVolume" style="display:inline-block;">
+                                    单件货物体积( m³ )
+                                </label>
+                                <span class="healper" style="font-size:13px;">运货小帮手<i class="glyphicon glyphicon-chevron-up"></i></span>
+                                <ul class="cacul hide">
+                                    <li>
+                                        <label for="len">长( cm )&nbsp;</label>
+                                        <input type="number" id="len" class="mavInput" value="0" />
+                                    </li>
+                                    <li>
+                                        <label for="width">宽( cm )&nbsp;</label>
+                                        <input type="number" id="width" class="mavInput" value="0" />
+                                    </li>
+                                    <li>
+                                        <label for="height">高( cm )&nbsp;</label>
+                                        <input type="number" id="height" class="mavInput" value="0" />
+                                    </li>
+                                    <li style="margin-bottom: 0;" class="text-right">
+                                        <button type="button" class="btn btn-info" id="compute">计 算</button>
+                                    </li>
+                                </ul>
+                                <input type="text" name="CargoVolume" id="cargoVolume" class="mavInput" value="0" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="service-weapper">
+                        <div class="maverickTitle">
+                            服务信息
+                            <span class="small">标 * 号为必填项</span>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-5">
+                                <label class="control-label" for="CargoValue">货物保价&nbsp;&nbsp;<a onclick="ToBottom()" class="learnMore">贵重物品需保价，点此了解</a></label>
+                                <input type="text" name="CargoValue" id="CargoValue" class="mavInput" placeholder="请填写货物真实价值" />
+                            </div>
+                            <div class="col-xs-5 col-xs-offset-2">
+                                <label class="control-label" for="sRisk">风险规避系数&nbsp;&nbsp;<span id="coefficient"></span></label>
+                                <div class="step-table-slider mySlider"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-5">
+                                <label class="control-label" for="PayType">付款方式</label>
+                                <select class="mavInput" name="PayType">
+                                    <option value="1" selected>现付</option>
+                                    <option value="2">到付</option>
+                                </select>
+                                <input name="PayType" hidden />
+                                <span class="tips tip-sPayType hide">此项为必填项</span>
+                            </div>
+                            <div class="col-xs-5 col-xs-offset-2">
+                                <label class="control-label required" for="TakeTime">取货时间&nbsp;&nbsp;<span>可能由于其他原因有所延迟</span></label>
+                                <input type="text" name="TakeTime" id="TakeTime" onkeydown="ClearTips('TakeTime')" class="mavInput" placeholder="请填写取货时间" />
+                                <span class="tips tip-TakeTime hide">此项为必填项</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-5">
+                                <label class="control-label" for="Mark">备注</label>
+                                <textarea class="mavInput mulText" name="Mark" id="mark"></textarea>
+                            </div>
+                            <div class="col-xs-7 mark-box">
+                                <ul class="mark-notes">
+                                    <li>
+                                        <span class="mark-note"> + 请带胶带 </span>
+                                        <span class="mark-note"> + 请带纸箱 </span>
+                                        <span class="mark-note"> + 缺文件袋 </span>
+                                    </li>
+                                    <li>
+                                        <span class="mark-note"> + 请带面单 </span>
+                                        <span class="mark-note"> + 需爬楼梯 </span>
+                                        <span class="mark-note"> + 来前电话 </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center order-end">
+                        <a href="javascript:void(0);" id="clauseStauts" class="agree-item"><span class="glyphicon glyphicon-ok-sign"></span>我同意</a>
+                        <a href="javascript:void(0);" class="term">《电子运单契约条款》</a>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" onclick="return SubmitOrder()" disabled id="ordering" class="btn orderbtn">下单</button>
+                    </div>
+
+
+                </div>
+
+                <input id="clauseStauts-hidden" value="0" hidden />
+                <input id="Risk" name="Risk" hidden />
+            }
+        </div>
+    </div>
+</section>
+
+<section class="faq-pg-section section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
+                <div class="section-title-s3">
+                    <span>—— FAQ ——</span>
+                    <h2>关于货物保价的问题解答</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col col-xs-12">
+                <div class="panel-group faq-accordion theme-accordion-s1" id="accordion">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse-1">关于风险规避系数的选取</a>
+                        </div>
+                        <div id="collapse-1" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <p>......逐渐完善中</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse-2">服务介绍</a>
+                        </div>
+                        <div id="collapse-2" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <p>若您选择我司保价服务，当货物在运输途中发生丢损，我司将按照声明价值和损失比例进行赔偿，赔偿金额不超过货物实际损失。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse-3">服务范围</a>
+                        </div>
+                        <div id="collapse-3" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <p>· 中国内地或至港澳台地区；</p>
+                                <p>· 港澳台地区或至中国内地；</p>
+                                <p>· 中国内地至新加坡、马来西亚、日本、韩国、俄罗斯、美国.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse-4">收费标准</a>
+                        </div>
+                        <div id="collapse-4" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <p>· 中国内地地区：声明价值500元及以下：1元人民币/票；声明价值501-1000元：2元人民币/票；声明价值1000元以上：保费=声明价值*标准服务费率（5‰），四舍五入取整；</p>
+                                <p>· 中国内地至港澳台地区：保费=声明价值*标准服务费率（5‰），四舍五入取整，最低收费8元人民币。</p>
+                                <p>· 中国内地至海外：保费=声明价值*标准服务费率（1%），四舍五入取整，最低收费8元人民币。</p>
+                                <p>· 详情可通过顺丰客服热线95338、当地收派员或点击<a href="#">在线客服咨询</a></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse-5">服务范围</a>
+                        </div>
+                        <div id="collapse-5" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <p>· 中国内地或至港澳台地区；</p>
+                                <p>· 港澳台地区或至中国内地；</p>
+                                <p>· 中国内地至新加坡、马来西亚、日本、韩国、俄罗斯、美国.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+@section myStyle{
+    <style type="text/css">
+        section {
+            background-color: #f1f2f3 !important;
+        }
+
+        * {
+            font-family: "微软雅黑";
+        }
+
+        .pick-show {
+            border: none !important;
+            border-bottom: 1px solid #ccc !important;
+            border-radius: 0;
+        }
+
+        .pick-list {
+            width: 100% !important;
+        }
+
+        .mySlider {
+            width: 100%;
+            max-width: 400px;
+            margin-top: 15px;
+            margin-left: 5px;
+        }
+
+        .ui-slider-handle {
+            background: #434d5a !important;
+            z-index: 1 !important;
+        }
+
+        .ui-state-focus,
+        .ui-state-hover {
+            border: 1px solid #fd5e16 !important;
+            background: #fd5e16 !important;
+            cursor: pointer !important;
+        }
+    </style>
+}
+
+@section myScript {
+
+    <script type="text/javascript">
+        $('.step-table-slider')
+            .slider({
+                min: 1,
+                max: 10,
+                step: 0.5
+            })
+            .slider('float')
+
+        $('.ui-slider-handle').mouseenter(function () {
+            var txt = $('.ui-slider-handle').text()
+            $('#coefficient').text('( ' + txt + ' )')
+            $('#Risk').val(txt)
+        })
+    </script>
+
+    <script>
+        $().ready(function () {
+            $('#TakeTime').on('click', function () {
+                pickuptime.init(0, function (data) {
+                    console.log(data.split(" ")); //回调
+                    $("#TakeTime").val(data.split(" "));
+                });
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        window.onload = function Init() {
+            sessionStorage.setItem('width', $('#location').outerWidth())
+        }
+        $(".pick-area1").pickArea({
+            "format": "湖南省/衡阳市/蒸湘区", //格式
+            "borderColor": "#ccc", //文本边框的色值
+            "arrowColor": "#ccc", //箭头颜色
+            "listBdColor": "#ccc", //下拉框父元素ul的border色值
+            "color": "#808e9b", //字体颜色
+            "fontSize": "13px", //字体大小
+            "hoverColor": "#fd5e16",
+            "paddingLeft": "5px",
+            "arrowRight": "10px",
+            //"preSet": "北京市/市辖区/东城区",
+            "getVal": function () {
+                //console.log($(".pick-area-hidden").val())
+                //console.log($(".pick-area-dom").val())
+                var thisdom = $("." + $(".pick-area-dom").val());
+                var str = $(thisdom).attr('id');
+                var id = str.replace('s', '');
+                //console.log(id)
+                $('#' + id).val($(".pick-area-hidden").val());
+                //console.log($('#' + id).val())
+                //thisdom.find('#SLocation').val($(".pick-area-hidden").val());
+            }
+        });
+    </script>
+
+    <script>
+        $('.healper').click(function () {
+            $('.cacul').toggleClass('hide')
+        })
+
+        $('#compute').click(function () {
+            var l = $('#len').val()
+            var w = $('#width').val()
+            var h = $('#height').val()
+            var v = Math.floor((Number(l) / 100) * (Number(w) / 100) * (Number(h) / 100) * 10000) / 10000
+            console.log(v)
+            $('#cargoVolume').val(v)
+            $('.cacul').toggleClass('hide')
+            $('#len').val(0)
+            $('#width').val(0)
+            $('#height').val(0)
+        })
+
+        $('.mark-note').click(function () {
+            var txt = $(this).text()
+            var str_1 = txt.replace(/\s*/g, '');
+            var str_2 = str_1.replace('+', '');
+            $('#mark').append(str_2 + ' ')
+        })
+
+        $('#clauseStauts').click(function () {
+            $(this).toggleClass('.agree-itemc')
+            if ($('#clauseStauts-hidden').val() == '0') {
+                $('#clauseStauts-hidden').val(1)
+                $('#ordering').prop("disabled", false)
+            } else {
+                $('#clauseStauts-hidden').val(0)
+                $('#ordering').prop("disabled", true)
+            }
+        })
+
+        function ToBottom() {
+            $("html,body").animate({
+                scrollTop: (document.getElementsByTagName("body")[0].scrollHeight - 1050)
+            },
+                1000
+            );
+        }
+
+        function SubmitOrder() {
+            var isComplete = true
+            var labels = $('label.required')
+            var names = new Array()
+            for (var i = 0; i < labels.length; i++) {
+                names[i] = $(labels[i]).attr('for')
+            }
+            for (var i = 0; i < names.length; i++) {
+                if (IsEmpty(names[i])) {
+                    var className = '.tip-' + names[i]
+                    $(className).removeClass('hide')
+                    isComplete = false
+                }
+            }
+            if (!isComplete)
+                alert('请填写完整信息')
+            return isComplete
+        }
+
+        function IsEmpty(name) {
+            var n = "name=" + name
+            var str = $('input[' + n + ']').val()
+            var str = str.replace(/(^\s*)|(\s*$)/g, '')
+
+            if (str == '' || str == undefined || str == null) {
+                return true
+            } else {
+                return false
+            }
+        }
+
+        function ClearTips(context) {
+            var className = '.tip-' + context
+            $(className).addClass('hide')
+        }
+    </script>
+}

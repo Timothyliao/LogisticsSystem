@@ -1,0 +1,36 @@
+﻿@model IEnumerable<LogisticsSystem.DTO.OrderListDto>
+    @Styles.Render("~/Content/userbootstrap")
+    <table class="table dt-responsive nowrap table-sm" width="100%" style="font-size:12px">
+        <thead class="thead-dark">
+            <tr>
+                <th>编号</th>
+                <th>时间</th>
+                <th>到站</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model != null)
+                {
+                    int counter = 0;
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.OrderId</td>
+                            <td>@item.Time</td>
+                            <td>@item.ReceiverAddress</td>
+                            <td>
+                                <div class="custom-control custom-checkbox" style="">
+                                    <input id="@string.Format("o{0}",counter)" class="custom-control-input" type="checkbox" />
+                                    <label for="@string.Format("o{0}",counter)" class="custom-control-label" style="font-size:13px">
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        counter++;
+                    }
+                }
+            }
+        </tbody>
+    </table>

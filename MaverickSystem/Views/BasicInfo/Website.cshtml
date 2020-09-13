@@ -1,0 +1,63 @@
+﻿@model List<LogisticsSystem.DTO.WebsiteInfoLookDto>
+
+@{
+    ViewBag.Title = "网点信息";
+    ViewBag.PageUrl = "/BasicInfo/Website";
+    ViewBag.PageName = "网点列表";
+    ViewBag.OrderNum = '1';
+    Layout = "~/Views/Shared/_Master.cshtml";
+}
+
+<div class="row" style="width:100% !important">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <table id="datatable-buttons" class="table dt-responsive nowrap table-hover table-sm" width="100%">
+                    <thead style="font-size:13px;">
+                        <tr>
+                            <th>#</th>
+                            <th>名称</th>
+                            <th>类型</th>
+                            <th>地址</th>
+                            <th>详细地址</th>
+                            <th>负责人</th>
+                            <th>负责人电话</th>
+                            <th>创建时间</th>
+                            @if (ViewBag.HasPower == "1")
+                            {
+                                <th>操作</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody style="font-size:13px;">
+                        @{
+                            int counter = 1;
+                            foreach (var item in Model)
+                            {
+                                string str = item.Type == "1" ? "普通网点" : item.Type == "2" ? "集散中心" : "转运中心";
+                                <tr style="vertical-align:middle !important">
+                                    <td>@counter</td>
+                                    <td>@item.Name</td>
+                                    <td>@str</td>
+                                    <td>@item.Province</td>
+                                    <td>@item.Address</td>
+                                    <td>@item.ChargeMan</td>
+                                    <td>@item.ChargeManTel</td>
+                                    <td>@item.CreateTime.ToLongDateString()</td>
+                                    @if (ViewBag.HasPower == "1")
+                                    {
+                                        <td>
+                                            <a id="@item.Id" class="btn btn-info mdi mdi-database-refresh" style="color:white;cursor:pointer;font-size:13px;padding:1px 5px">修改</a>
+                                            <a id="@item.Id" class="btn btn-danger mdi mdi-delete-sweep-outline" style="color:white;cursor:pointer;font-size:13px;padding:1px 5px">删除</a>
+                                        </td>
+                                    }
+                                </tr>
+                                ++counter;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

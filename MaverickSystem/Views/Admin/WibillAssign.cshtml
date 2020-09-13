@@ -1,0 +1,59 @@
+﻿
+@{
+    ViewBag.Title = "运单分配";
+    Layout = "~/Views/Shared/_Master.cshtml";
+}
+
+@section style{
+    <style>
+        .assginbox {
+            width: 50%;
+            display: inline-block;
+            height: 100%;
+            padding: 15px
+        }
+    </style>
+}
+
+<div class="row" style="width:100% !important">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body" style="width:100%">
+                <div style="float:left;border-right:1px solid #333;" class="assginbox">
+                    <table>
+                        @{
+                            int index = 0;
+                            foreach (var item in ViewBag.orderList)
+                            {
+                                <tr>
+                                    <td id="otd-@index">
+                                        <input type="checkbox" id="cb-@index" class="custom-checkbox" />
+                                        @item.SenderAddress.Split('市')[0] --- @item.ReceiverAddress.Split('市')[0] --- @item.OrderId
+                                    </td>
+                                </tr>
+                                index++;
+                            }
+                        }
+                    </table>
+                    <input type="button" value="-->" class="btn btn-primary" style="float:right;" />
+                </div>
+                <div style="float: right;" class="assginbox">
+                    <select class="custom-select" style="width:50%;">
+                        <option disabled tabindex="0" value="0">---请选择---</option>
+                        @{
+                            int index2 = 0;
+                            foreach (var item in ViewBag.truckList)
+                            {
+                                <option id="to-@index">
+                                    @item.LicencePlate --- @item.Load
+                                </option>
+                            }
+                            index2++;
+                        }
+                    </select>
+                    <input type="button" value="分配" class="btn btn-primary" style="float:right;" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

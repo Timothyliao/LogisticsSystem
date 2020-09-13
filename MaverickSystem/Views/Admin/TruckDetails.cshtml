@@ -1,0 +1,226 @@
+﻿@model LogisticsSystem.DTO.TruckInfoDto
+
+@{
+    ViewBag.Title = "车辆详情";
+    ViewBag.PageUrl = "/Admin/TruckDetails";
+    ViewBag.PageName = "车辆详情";
+    ViewBag.OrderNum = '2';
+    Layout = "~/Views/Shared/_Master.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="header-title mb-3" style="display:inline-block">订单信息</h4>
+                <font>
+                    <p>
+                        <font>车辆编号：</font>
+                        <font>@Model.TruckId</font>
+                    </p>
+                </font>
+                <div class="row">
+                    <div class="col-md-8">
+                        <ul class="list-unstyled mb-0" id="oorder">
+                            <li style="width:65%">
+                                <p>
+                                    <font>车辆型号：</font>
+                                    <font>@Model.TruckModel</font>
+                                </p>
+                                <p>
+                                    <font>车辆大小：</font>
+                                    <font>
+                                        @{
+                                            string size = @Model.TruckSize == "1" ? "微型货车" :
+                                                @Model.TruckSize == "2" ? "轻型货车" :
+                                                @Model.TruckSize == "3" ? "中型货车" : "重型货车";
+                                            <span>@size</span>
+                                        }
+                                    </font>
+                                </p>
+                                <p>
+                                    <font>购买时间：</font>
+                                    <font>@Model.Time.ToLongDateString()</font>
+                                </p>
+                                <p>
+                                    <font>购买价格：</font>
+                                    <font>￥@Model.Price</font>
+                                </p>
+
+                                <p>
+                                    <font>车辆类型：</font>
+                                    <font>@Model.TruckType</font>
+                                </p>
+                                <p>
+                                    <font>车辆类别：</font>
+                                    <font>@Model.TruckType</font>
+                                </p>
+                                <p>
+                                    <font>目前状态：</font>
+                                    <font>
+                                        @{
+                                            string str = Model.Stutas == "1" ? "运输中" : "空闲中";
+                                        }
+                                        <span>@str</span>
+                                    </font>
+                                </p>
+                                <p>
+                                    <font>车辆轴距：</font>
+                                    <font>
+                                        @Model.Wheelbase
+                                        mm
+                                    </font>
+                                </p>
+                                <p>
+                                    <font>车辆轴数：</font>
+                                    <font>@Model.AxlesNum</font>
+                                </p>
+                                <p>
+                                    <font>排放标准：</font>
+                                    <font>@Model.Exhaust</font>
+                                </p>
+                                <p>
+                                    <font>车辆车牌：</font>
+                                    <font id="oplate">@Model.LicencePlate</font>
+                                    <input type="text" value="@Model.LicencePlate" id="plate" class="form-control hide" style="width:50%;display:inline-block" />
+                                </p>
+                                <p>
+                                    <font>所属网点：</font>
+                                    @{
+                                        string url = "/BasicInfo/Website?name=" + @Model.AffiliationName;
+                                    }
+                                    <a id="owebsite" href="@url" class="text-danger">@Model.AffiliationName</a>
+                                    <select id="website" class="custom-select hide" style="width:50%;display:inline-block">
+                                        @foreach (var key in ViewBag.Keys)
+                                        {
+                                            if (ViewBag.Websites[key] == Model.AffiliationName)
+                                            {
+                                                <option value="@key" selected>@ViewBag.Websites[key]</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@key">@ViewBag.Websites[key]</option>
+                                            }
+
+                                        }
+                                    </select>
+                                </p>
+                            </li>
+                            <li style="width:35%">
+                                <p>
+                                    <font>车辆长度：</font>
+                                    <font>
+                                        @Model.TruckLength
+                                        m
+                                    </font>
+                                </p>
+                                <p>
+                                    <font>车辆宽度：</font>
+                                    <font>
+                                        @Model.TruckWidth
+                                        m
+                                    </font>
+                                </p>
+                                <p>
+                                    <font>车辆高度：</font>
+                                    <font>
+                                        @Model.TruckHeight
+                                        m
+                                    </font>
+                                </p>
+                                <p>
+                                    <font>整车重量：</font>
+                                    <font>@Model.TruckWeight t</font>
+                                </p>
+                                <p>
+                                    <font>额定载重：</font>
+                                    <font>@Model.Load t</font>
+                                </p>
+                                <p>
+                                    <font>车辆总重：</font>
+                                    <font>@Model.TotalWeight t</font>
+                                </p>
+                                <p>
+                                    <font>货箱类型：</font>
+                                    <font>@Model.ContainerType</font>
+                                </p>
+                                <p>
+                                    <font>货箱长度：</font>
+                                    <font>@Model.ContainerLength m</font>
+                                </p>
+                                <p>
+                                    <font>货箱宽度：</font>
+                                    <font>@Model.ContainerWidth m</font>
+                                </p>
+                                <p>
+                                    <font>货箱高度：</font>
+                                    <font>@Model.ContainerHeight m</font>
+                                </p>
+                                <p>
+                                    <font>核载人数：</font>
+                                    <font>@Model.CarrierNum</font>
+                                </p>
+
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4 text-center align-middle">
+                        <a href="#" class="thumbnail">
+                            <img src="@string.Format("/File/truckImg/{0}",Model.Img)" alt="..." class="img-fluid" style="border-radius:22px;margin-top:50px;">
+                        </a>
+                    </div>
+                </div>
+                <a href="javascript:;" onclick="Edit()" class="btn btn-info mdi mdi-border-color" style="color:white;cursor:pointer">&nbsp;编辑</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <button class="btn btn-primary" typeof="button" onclick="SaveEdit()">
+                    <span>保存编辑</span>
+                </button>
+                <div class="dataTables_filter" style="float:right">
+                    <a class="btn btn-secondary buttons-print" href="/Admin/TruckView">
+                        返回上一级
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section style{
+    <style>
+        .row {
+            width: 100% !important;
+        }
+
+        #oorder > li {
+            padding: 0; /* 将默认的内边距去掉 */
+            margin: 0; /* 将默认的外边距去掉 */
+            float: left; /* 往左浮动 */
+            display: block;
+        }
+    </style>
+}
+
+@section scripts{
+    <script>
+        window.onload = function () {
+            $('#website').hide()
+            $('#plate').hide()
+        }
+        function Edit() {
+            $('#owebsite').hide()
+            $('#website').show()
+            $('#oplate').hide()
+            $('#plate').show()
+            //location.reload()
+        }
+    </script>
+
+}

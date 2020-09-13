@@ -1,0 +1,100 @@
+
+@import url("main.css");
+html {
+  height: 100%;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #f0f0f0;
+  font-size: 0.875rem;
+}
+
+* {
+  box-sizing: border-box;
+  color: #000;
+  list-style: none;
+  text-decoration: none;
+}
+
+a:hover{
+	text-decoration: none;
+}
+
+		
+.header{	
+	background: #FFFFFF;
+	padding: 0px 100px;
+	height: max-content;
+}
+
+.content-mui-view,
+.sheet-mui-view{
+	margin: 0;
+}
+
+
+.wrapper {
+  width: 100%;
+  height: 100%;
+  padding: 40px 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+
+/*------------------------------------------*/	
+.left-side-menu{
+	min-width: 250px;
+	max-width: 250px;
+	background-color: #fff;
+	box-shadow: 0 0 35px 0 rgba(154, 161, 171, 0.1);
+	border-radius: 5px;
+	min-height: 100%;
+	height: max-content;
+	padding: 25px 0;
+}
+	
+.left-side-menu>.side-nav{
+	padding: 30px 30px;
+}
+.left-side-menu>.person-table{
+	width: 100%;
+}
+.person-table img{
+	width: 80px;
+	height: 80px;
+	border: 1px solid slategray;
+	border-radius: 50%;
+	transition: .3s;
+}
+
+.person-table img:hover{
+	cursor: pointer;
+	box-shadow: 0 10px 35px 0 rgba(154, 161, 171, 0.1);
+}
+	
+.person-table th,td{
+	text-align: center;
+	padding: 3px 10px;
+}
+
+/*right cntent*/
+.content-page {
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 30px;
+  margin: 0 0 0 50px;
+  box-shadow: 0 0 35px 0 rgba(154, 161, 171, 0.1);
+}
+
+.foot{
+	text-align: center;
+	background: #f0f0f0;
+}

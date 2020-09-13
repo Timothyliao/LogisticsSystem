@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "GetOrderData";
+    Layout = "~/Views/Shared/_Master.cshtml";
+}
+
+<div class="row w-100">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+
+                <div id="InfoTips-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-body p-4">
+                                <div class="text-center">
+                                    <h4 class="mt-2">消息提示</h4>
+                                    <p class="mt-3">数据处理中，请稍后...</p>
+                                    <p>
+                                        <div class="spinner-border text-info m-2"></div>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="button-list">
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#InfoTips-modal">显示模态框</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section scripts{
+    <script>
+        $('#confirm').click(function () {
+            alert($('#owebsitename').val())
+            $('#login-modal').modal('hide')
+        })
+    </script>
+}

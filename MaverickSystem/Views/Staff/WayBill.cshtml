@@ -1,0 +1,187 @@
+﻿@model LogisticsSystem.DTO.BookingNoteInfoDto
+
+@{
+    ViewBag.Title = "订单查询";
+    Layout = "~/Views/Shared/_Master.cshtml";
+}
+
+<div class="row" style="width:100% !important;">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <form action="/Staff/WayBill" method="post" id="wayBillForm">
+                    <div class="form-group">
+                        <label for="code">条码值:</label>
+                        <input class="form-control" type="text" name="code" id="code" placeholder="请使用条码枪扫描" oninput="GetV()" />
+                    </div>
+                    <button class="btn btn-primary" hidden type="submit">提交</button>
+                </form>
+            </div>
+
+            <div class="card-body">
+                @if (Model != null)
+                {
+                    <table class="table">
+                        <tr>
+                            <td>
+                                @Html.LabelFor(model => model.OrderId)
+                                @Html.DisplayFor(model => model.OrderId)
+                            </td>
+                            <td>
+                                @Html.LabelFor(model => model.CreateTime)
+                                @Html.DisplayFor(model => model.CreateTime)
+                            </td>
+                            <td>
+                                @Html.LabelFor(model => model.Stutas)
+                                @Html.DisplayFor(model => model.Stutas)
+                            </td>
+                            <td>
+                                @Html.LabelFor(model => model.Value)
+                                ￥ @Html.DisplayFor(model => model.Value)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.LabelFor(model => model.InsureFee)
+                                ￥ @Html.DisplayFor(model => model.InsureFee)
+                            </td>
+                            <td>
+                                @Html.LabelFor(model => model.Freight)
+                                ￥ @Html.DisplayFor(model => model.Freight)
+                            </td>
+                            <td>
+                                @Html.LabelFor(model => model.ServiceFee)
+                                ￥ @Html.DisplayFor(model => model.ServiceFee)
+                            </td>
+                            <td>
+                                @Html.LabelFor(model => model.PayType)
+                                @Html.DisplayFor(model => model.PayType)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.LabelFor(model => model.GetGoodsTime)
+                                @Html.DisplayFor(model => model.GetGoodsTime)
+                            </td>
+                            <td>
+                                @Html.LabelFor(model => model.Mark)
+                                @Html.DisplayFor(model => model.Mark)
+                            </td>
+                            <td>
+                                @Html.LabelFor(model => model.CargoName)
+                                @Html.DisplayFor(model => model.CargoName)
+                            </td>
+                            <td>
+                                @Html.LabelFor(model => model.CargoUnit)
+                                @Html.DisplayFor(model => model.CargoUnit)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.LabelFor(model => model.CargoWeight)
+                                @Html.DisplayFor(model => model.CargoWeight) t
+                            </td>
+                            <td>
+                                @Html.LabelFor(model => model.CargoVolumn)
+                                @Html.DisplayFor(model => model.CargoVolumn) m<sup>3</sup>
+                            </td>
+                            <td>
+                                @Html.LabelFor(model => model.SenderName)
+                                @Html.DisplayFor(model => model.SenderName)
+                            </td>
+                            <td>
+                                @Html.LabelFor(model => model.SMobilePhone)
+                                @Html.DisplayFor(model => model.SMobilePhone)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.LabelFor(model => model.SAddress)
+                                @Html.DisplayFor(model => model.SAddress)
+                            </td>
+                            <td>
+                                @Html.LabelFor(model => model.SFirm)
+                                @Html.DisplayFor(model => model.SFirm)
+                            </td>
+                            <td>
+                                @Html.LabelFor(model => model.STel)
+                                @Html.DisplayFor(model => model.STel)
+                            </td>
+                            <td>
+                                @Html.LabelFor(model => model.ReceiverName)
+                                @Html.DisplayFor(model => model.ReceiverName)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.LabelFor(model => model.RMobilePhone)
+                                @Html.DisplayFor(model => model.RMobilePhone)
+                            </td>
+                            <td>
+                                @Html.LabelFor(model => model.RAddress)
+                                @Html.DisplayFor(model => model.RAddress)
+                            </td>
+                            <td>
+                                @Html.LabelFor(model => model.RFirm)
+                                @Html.DisplayFor(model => model.RFirm)
+                            </td>
+                            <td>
+                                @Html.LabelFor(model => model.RTel)
+                                @Html.DisplayFor(model => model.RTel)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.LabelFor(model => model.WebSiteName)
+                                @Html.DisplayFor(model => model.WebSiteName)
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section style{
+    <style>
+        label {
+            display: block !important;
+        }
+
+        td {
+            width: 25% !important;
+        }
+    </style>
+}
+
+@section scripts{
+    <script>
+        window.onload = function () {
+            $('#code').focus()
+            focus()
+        }
+
+        var focus = function () {
+            setTimeout(function () {
+                let activeElement = document.activeElement;
+                if (activeElement.type !== 'text') {
+                    $('#code').focus()
+                }
+                focus();
+            }, 1000);
+        }
+
+        function GetV() {
+            var codeText = $('#code').val()
+            if (codeText.length == 15) {
+                $('#wayBillForm').submit()
+            }
+        }
+
+    </script>
+}

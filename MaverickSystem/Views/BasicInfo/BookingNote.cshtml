@@ -1,0 +1,463 @@
+﻿
+@{
+    ViewBag.Title = "订单详细";
+    ViewBag.PageUrl = "/BasicInfo/BookingNote";
+    ViewBag.PageName = "订单详情";
+    ViewBag.OrderNum = '2';
+    Layout = "~/Views/Shared/_Master.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="header-title mb-3" style="display:inline-block">订单信息</h4>
+                <ul class="list-unstyled mb-0" id="oorder">
+                    <li>
+                        <p>
+                            <font>
+                                订单编号：
+                            </font>
+                            <font>
+                                @ViewBag.Order.OrderId
+                            </font>
+                        </p>
+                        <p>
+                            <font>
+                                创建时间：
+                            </font>
+                            <font>
+                                @ViewBag.Order.CreateTime
+                            </font>
+                        </p>
+                        <p>
+                            <font>
+                                目前状态：
+                            </font>
+                            <font>
+                                @ViewBag.Order.Stutas
+                            </font>
+                        </p>
+                        <p>
+                            <font>
+                                发运网点：
+                            </font>
+                            @{
+                                string url = "/BasicInfo/Website?name=" + @ViewBag.Order.WebSiteName;
+                            }
+                            <a href="@url" class="text-danger">@ViewBag.Order.WebSiteName</a>
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <font>申明价值： </font>
+                            <font>￥&nbsp;@ViewBag.Order.Value</font>
+                        </p>
+                        <p>
+                            <font>保价费用：</font>
+                            <font>￥&nbsp;@ViewBag.Order.InsureFee</font>
+                        </p>
+                        <p>
+                            <font>托运费用：</font>
+                            <font>￥&nbsp;@ViewBag.Order.Freight</font>
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <font>付款方式：</font>
+                            <font>@ViewBag.Order.PayType</font>
+                        </p>
+                        <p>
+                            <font>
+                                取货时间：
+                            </font>
+                            <font>@ViewBag.Order.GetGoodsTime</font>
+                        </p>
+                        <p>
+                            <font>客户留言：</font>
+                            <font>@ViewBag.Order.Mark</font>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="header-title mb-3">货物信息</h4>
+                <ul class="list-unstyled mb-0">
+                    <li>
+                        <p>
+                            <font>货物名称：</font>
+                            <font>@ViewBag.Order.CargoName</font>
+                        </p>
+                        <p>
+                            <font>
+                                货物件数：<font>
+                                </font>@ViewBag.Order.CargoUnit
+                            </font>
+                        </p>
+                        <p>
+                            <font>货物重量：</font>
+                            <font>@ViewBag.Order.CargoWeight&nbsp;kg</font>
+                        </p>
+                        <p>
+                            <font>货物体积：</font>
+                            <font>@ViewBag.Order.CargoVolumn&nbsp;m<sup>3</sup></font>
+                        </p>
+                        <p>
+                            <font>&nbsp;</font>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="header-title mb-3">托运人信息</h4>
+                <ul class="list-unstyled mb-0">
+                    <li>
+                        <p>
+                            <font>姓名：</font>
+                            <font>@ViewBag.Order.SenderName</font>
+                        </p>
+                        <p>
+                            <font>电话：</font>
+                            <font>@ViewBag.Order.SMobilePhone</font>
+                        </p>
+                        <p>
+                            <font>地址：</font>
+                            <font>@ViewBag.Order.SAddress</font>
+                        </p>
+                        <p>
+                            <font>公司：</font>
+                            <font>@ViewBag.Order.SFirm</font>
+                        </p>
+                        <p>
+                            <font>固定电话：</font>
+                            <font>@ViewBag.Order.STel</font>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="header-title mb-3">收件人信息</h4>
+                <ul class="list-unstyled mb-0">
+                    <li>
+                        <p>
+                            <font>姓名：</font>
+                            <font>@ViewBag.Order.ReceiverName</font>
+                        </p>
+                        <p>
+                            <font>电话：</font>
+                            <font>@ViewBag.Order.RMobilePhone</font>
+                        </p>
+                        <p>
+                            <font>地址：</font>
+                            <font>@ViewBag.Order.RAddress</font>
+                        </p>
+                        <p>
+                            <font>公司：</font>
+                            <font>@ViewBag.Order.RFirm</font>
+                        </p>
+                        <p>
+                            <font>固定电话：</font>
+                            <font>@ViewBag.Order.RTel</font>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="dataTables_filter" id="datatable-buttons_filter">
+                    <button class="btn btn-secondary buttons-print" aria-controls="datatable-buttons" typeof="button" onclick="preview(1)">
+                        <span>打印托运单</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" id="printContent">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <!--startprint1-->
+                <table id="bookingnote" class="table table-bordered table-sm">
+                    <tr>
+                        <td colspan="11" style="text-align: center; border: 1px solid transparent !important;padding:0;">
+                            <h3>Maverick货物托运单</h3>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" style="text-align: left; border: 1px solid transparent !important; border-bottom: 1px solid #000000 !important;padding:0">
+                            NO：@{
+                                string num = (ViewBag.Order.OrderId).Replace("96", "");
+                                <span>@num</span>
+                            }
+                        </td>
+                        <td class="text-right" colspan="6" style="border: 1px solid transparent !important; border-bottom: 1px solid #000000 !important;padding:0">
+                            <img src="/DrawCode39Bar.ashx?code=@ViewBag.Order.OrderId" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>托运日期：</td>
+                        <td>
+                            @{
+                                var time = (ViewBag.Order.CreateTime).ToString();
+                                var data = ViewBag.Order.GetGoodsTime.ToString();
+                                var str = time.Split('年')[0] + "年" + data.Split('日')[0];
+                                str = str.Replace("年", "/");
+                                str = str.Replace("月", "/");
+                                <span>@str</span>
+                            }
+                        </td>
+                        <td>发运网点：</td>
+                        <td>@ViewBag.Order.WebSiteName</td>
+                        <td>始发站：</td>
+                        <td>
+                            @{
+                                var SAddress = (ViewBag.Order.SAddress).ToString();
+                                var SAdd = SAddress.Split('市')[0] + "市";
+                                <span>@SAdd</span>
+                            }
+                        </td>
+                        <td>目的站：</td>
+                        <td>
+                            @{
+                                var RAddress = (ViewBag.Order.RAddress).ToString();
+                                var RAdd = RAddress.Split('市')[0] + "市";
+                                <span>@RAdd</span>
+                            }
+                        </td>
+                        <td colspan="3" rowspan="3" style="padding:0 !important;text-align:center">
+                            @*<img src="/DrawCode39Bar.ashx?code=@ViewBag.Order.OrderId"  />*@
+                        </td>
+                    </tr>
+                    <tr>
+                        <td rowspan="3">托运人</td>
+                        <td>名称</td>
+                        <td colspan="2">@ViewBag.Order.SenderName</td>
+                        <td rowspan="3">收货人</td>
+                        <td>名称</td>
+                        <td colspan="2">@ViewBag.Order.ReceiverName</td>
+                    <tr>
+                        <td>地址</td>
+                        <td colspan="2">@ViewBag.Order.SAddress</td>
+                        <td>地址</td>
+                        <td colspan="2">@ViewBag.Order.RAddress</td>
+                    </tr>
+                    <tr>
+                        <td>电话</td>
+                        <td colspan="2">@ViewBag.Order.SMobilePhone</td>
+                        <td>电话</td>
+                        <td colspan="2">@ViewBag.Order.RMobilePhone</td>
+                        <td rowspan="2">付款方式</td>
+                        <td colspan="2">
+                            现付@{
+                                if ((ViewBag.Order.PayType).ToString() == "现付")
+                                {
+                                    <span>&nbsp;&nbsp;&radic;</span>
+                                }
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>序号</td>
+                        <td>货物名称</td>
+                        <td>件数</td>
+                        <td>重量</td>
+                        <td>体积</td>
+                        <td>保价费</td>
+                        <td>运价</td>
+                        <td>服务费</td>
+                        <td colspan="2">
+                            到付 @{
+                                if ((ViewBag.Order.PayType).ToString() == "到付")
+                                {
+                                    <span>&nbsp;&nbsp;&radic;</span>
+                                }
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>#1</td>
+                        <td>@ViewBag.Order.CargoName</td>
+                        <td>@ViewBag.Order.CargoUnit</td>
+                        <td>@ViewBag.Order.CargoWeight</td>
+                        <td>@ViewBag.Order.CargoVolumn</td>
+                        <td>@ViewBag.Order.InsureFee</td>
+                        <td>@ViewBag.Order.Freight</td>
+                        <td>@ViewBag.Order.ServiceFee</td>
+                        <td rowspan="3">业务类型</td>
+                        <td colspan="2">特快</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 10%">#2</td>
+                        <td style="width: 10%"></td>
+                        <td style="width: 10%"></td>
+                        <td style="width: 10%"></td>
+                        <td style="width: 10%"></td>
+                        <td style="width: 10%"></td>
+                        <td style="width: 10%"></td>
+                        <td style="width: 10%"></td>
+                        <td colspan="2">快件</td>
+
+                    </tr>
+                    <tr>
+                        <td>#3</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="auto-style2" colspan="2">普快&nbsp;&nbsp;&radic;</td>
+                    </tr>
+                    <tr>
+                        <td>合计</td>
+                        <td></td>
+                        <td>@ViewBag.Order.CargoUnit</td>
+                        <td>@ViewBag.Order.CargoWeight</td>
+                        <td>@ViewBag.Order.CargoVolumn</td>
+                        <td>@ViewBag.Order.InsureFee</td>
+                        <td>@ViewBag.Order.Freight</td>
+                        <td>@ViewBag.Order.ServiceFee</td>
+                        <td style="width: 8%" rowspan="3">复核栏</td>
+                        <td style="width: 6%">件数</td>
+                        <td style="width: 6%"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">合计金额大写：</td>
+                        <td colspan="6" style="text-align: center;" id="money">
+                            <span>拾</span>
+                            <span>万</span>
+                            <span>仟</span>
+                            <span>佰</span>
+                            <span>拾</span>
+                            <span>圆</span>
+                            <span>角</span>
+                        </td>
+                        <td>重量</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">总金额：</td>
+                        <td colspan="6">@ViewBag.TotalPrice</td>
+                        <td>体积</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">货物描述：</td>
+                        <td colspan="6"></td>
+                        <td style="width: 8%;">复核人：</td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2">托运协议：</td>
+                        <td colspan="7" rowspan="2" style="color: red;">
+                            <p>1、请托运方仔细阅读一下运输协议，在您签字后说明您已无异议；</p>
+                            <p>2、托运人应如实填写货物名称和质量，不得夹带易燃、易爆、剧毒物品等违禁物品，否则引起的一切后果有托运人承担；</p>
+                            <p>3、等等等等......；</p>
+                            <p>4、等等等等......；</p>
+                        </td>
+                        <td>制单人签字</td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td>收货人签字</td>
+                        <td colspan="2"></td>
+                    </tr>
+                </table>
+                <!--endprint1-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section style{
+    <style>
+        .row {
+            width: 100% !important;
+        }
+
+        #bookingnote {
+            font-size: 15px;
+        }
+
+            #bookingnote td {
+                border: 1px solid #000000 !important;
+                text-align: left;
+                vertical-align: middle !important;
+            }
+
+                #bookingnote td > p {
+                    margin-bottom: 5px;
+                }
+
+            #bookingnote #money span {
+                display: inline-block;
+                padding: 0 4%;
+            }
+
+        #printContent {
+            display: none;
+        }
+
+        #oorder > li {
+            padding: 0; /* 将默认的内边距去掉 */
+            margin: 0; /* 将默认的外边距去掉 */
+            float: left; /* 往左浮动 */
+            display: block;
+            width: 33.33%;
+        }
+    </style>
+
+    <style media="print">
+
+        #printContent {
+            display: block;
+            text-align: center;
+        }
+    </style>
+
+}
+
+@section scripts{
+    <script>
+        function preview(oper) {
+            if (oper < 10) {
+                bdhtml = window.document.body.innerHTML;//获取当前页的html代码
+                sprnstr = "<!--startprint" + oper + "-->";//设置打印开始区域
+                eprnstr = "<!--endprint" + oper + "-->";//设置打印结束区域
+                prnhtml = bdhtml.substring(bdhtml.indexOf(sprnstr) + 18); //从开始代码向后取html
+                prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr));//从结束代码向前取html
+                window.document.body.innerHTML = prnhtml;
+                window.print();
+                window.document.body.innerHTML = bdhtml;
+            } else {
+                print.portrait = true
+                window.print();
+            }
+            location.reload()
+        }
+    </script>
+
+}

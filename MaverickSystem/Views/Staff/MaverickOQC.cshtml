@@ -1,0 +1,106 @@
+﻿
+@{
+    ViewBag.Title = "出货管理";
+    Layout = "~/Views/Shared/_Master.cshtml";
+}
+
+
+
+<div class="row" style="width:100% !important;">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="code">条码值:</label>
+                    <input class="form-control" type="text" name="code" id="code" placeholder="条码值" oninput="GetV()" />
+                </div>
+            </div>
+            <div class="card-body" style="max-height:450px !important;overflow-y:scroll">
+                <div class="table-responsive-sm">
+                    <table class="table table-centered mb-0 table-sm">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>结果</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dataTable">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <table class="table" id="oqcdate">
+                </table>
+                <form action="/Staff/MaverickOQC" method="post" id="OQCCheckForm">
+                    <input id="oqcvalue" hidden />
+                    <button class="btn btn-primary" type="submit">提交</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section style{
+    <style>
+        label {
+            display: block !important;
+        }
+    </style>
+}
+
+@section scripts{
+    <script>
+        window.onload = function () {
+            $('#code').focus()
+            focus()
+        }
+
+        var focus = function () {
+            setTimeout(function () {
+                let activeElement = document.activeElement;
+                if (activeElement.type !== 'text') {
+                    $('#code').focus()
+                }
+                focus();
+            }, 3000);
+        }
+
+        function GetV() {
+            var codeText = $('#code').val()
+            if (codeText.length == 15) {
+                var checkedval = $('#oqcvalue').val()
+                var reg = new RegExp(codeText)
+                console.log(checkedval)
+                console.log(reg)
+                if (!reg.test(checkedval)) {
+                    $.ajax({
+                        url: '/Staff/OQCCheck?oid=' + codeText,
+                        type: 'Get',
+                        success: function (data) {
+                            if (data.coplete == 'ok') {
+                                var txt
+                                if (data.stutas == "配货中") {
+                                    txt = '<tr><td>' + codeText + '</td><td><i class="mdi mdi-circle text-info" /><font style="vertical-align: inherit;">' + data.stutas + '</font></td></tr>'
+                                }
+                                else {
+                                    txt = '<tr class="bg-danger text-white"><td>' + codeText + '</td><td><i class="mdi mdi-circle text-warning" /><font style="vertical-align: inherit;">' + data.stutas + '</font></td></tr>'
+                                }
+                                $('#dataTable').append(txt)
+                                var oidval = $('#oqcvalue').val() + codeText + ';'
+                                $('#oqcvalue').val(oidval)
+                            }
+                            else {
+
+                            }
+                        }
+                    })
+                }
+                $('#code').val('')
+            }
+        }
+
+    </script>
+}

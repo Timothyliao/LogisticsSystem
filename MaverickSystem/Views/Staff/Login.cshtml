@@ -1,0 +1,155 @@
+﻿@model MaverickSystem.Models.Front.LoginViewModel
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_UserLogin.cshtml";
+}
+
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body" id="greetings"></div>
+            <div class="modal-footer" style="border: none;">
+                <button type="button" class="btn btn-default" data-dismiss="modal">你好 maverick</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="left">
+    <h1 id="hi"></h1>
+    <p>Maverick零担物流公司管理系统</p>
+    <p id="time"></p>
+</div>
+<div class="right">
+    <div class="formBox">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <input type="text" name="Account" id="acc" value="Admin" placeholder="电话号码" onfocus="Login()" onblur="onChange(acc)"
+                       onkeydown="Import(acc)" onkeyup="Delete(acc)" />
+                <div class="tips" id="tip_acc">
+                    <span>请输入用户名</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="password" name="PassWord" id="pwd" placeholder="密码" onfocus="Login()" onblur="onChange(pwd)" onkeydown="Import(pwd)"
+                       onkeyup="Delete(pwd)" />
+                <div class="tips" id="tip_pwd">
+                    <span>请输入密码</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="text" name="" id="code" placeholder="验证码" onfocus="Login()" onblur="onChange(code)" onkeydown="Import(code)"
+                       onkeyup="Delete(code)" />
+                <div class="tips" id="tip_code">
+                    <span>请输入验证码</span>
+                </div>
+                <div class="input-cell" id="cav">
+                    <canvas id="authcode" width="200" height="40" onclick="SwitchCode()"></canvas>
+                    <label id="codenum" hidden="hidden"> </label>
+                </div>
+            </div>
+
+            <div class="btnbox">
+                <button class="btn" type="submit" onclick="return CheckCode()">登 陆</button>
+                <div class="custom-control custom-checkbox" style="float: right;margin-top: 0.6rems;">
+                    <input type="checkbox" name="IsSave" class="custom-control-input" id="check1" style="cursor: pointer;">
+                    <label class="custom-control-label" for="check1" style="cursor: pointer;">记住我</label>
+                </div>
+            </div>
+            <div class="form-group" id="register">
+                <small>
+                    <font color="slategray">修改密码？</font>
+                    <a href="/Staff/Register">点击这里</a>
+                </small>
+            </div>
+            <input type="text" hidden name="counter" value="0" />
+        }
+    </div>
+</div>
+@section scripts{
+    <script>
+        window.onload = function GetTime() {
+            var poetry = ""
+            var date = new Date();
+            var now = date.getFullYear + '-' + date.getMonth() + '-' + date.getDate()
+            $.get("http://api.tianapi.com/txapi/everyday/index?key=89045aa892a3f67a8f2b30cae6e02119&rand=1&date=" + now,
+                function (data, status) {
+                    if (data.code == 200) {
+                        poetry = data.newslist[0].note
+                        var contxt = document.querySelector("#time");
+                        var greetings = document.getElementById("greetings");
+                        var words = Settime(contxt);
+                        greetings.innerHTML = poetry + "<br/><br/>" + words;
+                        if (sessionStorage.getItem("loginFlag") == null) {
+                            $('#myModal').modal(); //运行模态框
+                            sessionStorage.setItem("loginFlag", 1)
+                        }
+                    }
+                });
+
+
+            var contxt = this.document.getElementById('time')
+            setInterval(function () {
+                var date = new Date();
+                var year = date.getFullYear();
+                var month = date.getMonth();
+                var day = date.getDate();
+                var hour = date.getHours();
+                var minite = date.getMinutes();
+                var second = date.getSeconds();
+                contxt.innerText = year + "/" + month + "/" + day + "  " + hour + ":" + minite + ":" + second;
+            }, 1000);
+            var hiWord = document.querySelector("#hi");
+            hiWord.innerText = "欢迎回家!";
+            SwitchCode("authcode");
+        };
+
+        function Settime(contxt) {
+            var date = new Date();
+            var year = date.getFullYear();
+            var month = date.getMonth();
+            var day = date.getDate();
+            var hour = date.getHours();
+            var minite = date.getMinutes();
+            var second = date.getSeconds();
+            contxt.innerText = year + "/" + month + "/" + day + "  " + hour + ":" + minite + ":" + second;
+            var greetings = "亲爱的员工，";
+            if (hour > 12 && hour <= 18)
+                greetings += "下午好！";
+            else if (hour > 18)
+                greetings += "晚上好！";
+            else
+                greetings += "上午好！";
+            return greetings;
+        }
+
+
+        function CheckCode() {
+            if ($('#check1').prop('checked'))
+                $('#check1').val('true')
+            else
+                $('#check1').val('false')
+            var account = $('#acc').val()
+            var password = $('#pwd').val()
+            var num = $('#codenum').val()
+            if (account == '' || password == '' || num == '') {
+                alert('请输入完整信息！')
+                return false
+            } else if ($('#code').val().toLowerCase() == num)
+                return true
+            else {
+                SwitchCode()
+                alert('验证码错误！')
+                return false
+            }
+        }
+    </script>
+}

@@ -1,0 +1,105 @@
+﻿
+@{
+    ViewBag.Title = "职员信息";
+    Layout = "~/Views/Shared/_Master.cshtml";
+}
+
+@section style{
+    <style>
+        label {
+            margin: 0;
+            line-height: 37.39px;
+        }
+
+        td {
+            text-align: left;
+            width: 50%;
+            height:52px;
+        }
+    </style>
+}
+
+<div class="row" style="width:100% !important">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="input-group col-md-5" style="float:left">
+                    <label>部门：</label>
+                    <select class="custom-select" id="department">
+                        <option disabled selected value="0">--请选择--</option>
+                        @{
+                            for (int i = 0; i < ViewBag.SectionList.Length; i++)
+                            {
+                                <option value="@ViewBag.SectionList[i]">@ViewBag.SectionList[i]</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="input-group col-md-5" style="float:right">
+                    <label>人员：</label>
+                    <select class="custom-select" id="staff">
+                        <option disabled selected value="0">--请选择--</option>
+                        @{
+                            if (ViewBag.StaffList != null)
+                            {
+                                for (int i = 0; i < ViewBag.StaffList.Length; i++)
+                                {
+                                    <option value="@ViewBag.StaffList[i]">@ViewBag.StaffList[i]</option>
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="card-body text-center" id="dateArea">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+
+
+        $("select#department").change(function () {
+            var value = $(this).val();
+            $(staff).html("");
+            $(staff).append("<option disabled selected value='0'>--请选择--</option>");
+            $.get('GetStaffDetilBySn?sn=' + value,
+                null,
+                function (data) {
+                    var staffs = JSON.parse(data)
+                    for (var i = 0; i < staffs.length; i++) {
+                        $(staff).append('<option value=' + staffs[i] + '>' + staffs[i] + '</option>')
+                    }
+                })
+        });
+
+
+        $("select#staff").change(function () {
+            var value = $(this).val();
+            $.get('GetStaffDetilByStn?stn=' + value,
+                null,
+                function (data) {
+                    var obj = JSON.parse(data)
+                    console.log(obj)
+
+                    let str = "<table class='table table-border' style='width:900px;margin:auto'>"
+                    str += "<tr><td colspan='2' class='text-center'>Maverick 职员信息表</td></tr>"
+                    str += "<tr><td>员工姓名：" + obj[0].Name + "</td>"
+                    str += "<td rowspan='4' class='text-center'><img style='width:180px;height:180px;border-radius:5px' src='/assets/images/users/" + obj[0].Photo + "'></img></td></tr>"
+                    str += "<tr><td>员工工号：" + obj[0].Id + "</td></tr>"
+                    str += "<tr><td>入职时间：" + obj[0].CreateTime.split('T')[0] + "</td></tr>"
+                    str += "<tr><td>所属部门：" + obj[0].SectionName + "</td></tr>"
+                    str += "<tr><td>所属岗位：" + obj[0].Position + "</td><td>联系电话：" + obj[0].Tel + "</td></tr>"
+                    str += "<tr><td>身份证号：" + obj[0].IdCard + "</td><td>员工地址：" + obj[0].Address + "</td></tr>"
+                    str += "<tr><td>员工邮箱：" + obj[0].Email + "</td><td>在职状况：" + obj[0].Status + "</td></tr>"
+                    str += "</table>"
+                    $('#dateArea').html("")
+                    $('#dateArea').append(str)
+                })
+        });
+
+    </script>
+}

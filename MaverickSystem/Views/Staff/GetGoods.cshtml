@@ -1,0 +1,739 @@
+﻿
+@{
+    ViewBag.Title = "GetGoods";
+    Layout = "~/Views/Shared/_Master.cshtml";
+}
+
+<div class="row messageBox messageBox-left" id="messageBox-left">
+    <div class="switchBtn switchBtn-left text-center" id="0" data-toggle="tooltip" data-placement="right" title="点击展开结果">
+        <i class=" mdi mdi-chevron-right" id="switchIcon-left" style="color:white;width:32px"></i>
+    </div>
+    <div class="container-fluid" style="top:0 !important">
+        <div class="row">
+            <div class="col-md-12 card" style="padding:0;box-shadow:none">
+                <div class="card-body" style="display:block;padding:10px 0" id="section1">
+                    <h5 class="card-title">处理人：<label id="opPerson"></label></h5>
+                    <h6 class="card-subtitle text-muted">时间：<label id="opTime"></label></h6>
+                </div>
+                <div class="card-body" style="display:block;padding:10px 0" id="section2">
+                    <h6 class="badge badge-info"><font>操作结果：</font></h6>
+                    <table class="table dt-responsive nowrap table-sm" width="100%" style="font-size:12px;margin-bottom:10px">
+                        <thead class="thead-dark">
+                            <tr>
+                                <td>收货顺序</td>
+                                <td>订单ID</td>
+                                <td>位置</td>
+                            </tr>
+                        </thead>
+                        <tbody id="planningOrder">
+                        </tbody>
+                    </table>
+                    <div style="border-top:1px solid #ccc;height:10px;"></div>
+                    <p>载货车辆：<label id="vehicle"></label></p>
+                </div>
+                <div class="card-body" style="display:block;padding:10px 0" id="section3">
+                    <h6 class="badge badge-info"><font>相关数据：</font></h6>
+                    <p>货物总重：<label id="cargoW"></label>&nbsp;kg</p>
+                    <p>货物总体积：<label id="cargoV"></label>&nbsp;m<sup>3</sup></p>
+                    <p>车辆载重：<label id="vehicleW"></label>&nbsp;kg</p>
+                    <p>车辆空间：<label id="vehicleV"></label>&nbsp;m<sup>3</sup></p>
+                    <p>车辆空间利用率：<label id="vRate"></label></p>
+                    <p>车辆载重利用率：<label id="wRate"></label></p>
+                    <p>货物总收入（运费）：<label id="value"></label>&nbsp;RMB</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row messageBox messageBox-right" id="messageBox-right">
+    <div class="switchBtn switchBtn-right text-center" id="1" data-toggle="tooltip" data-placement="left" title="点击展开操作说明">
+        <i class=" mdi mdi-chevron-right" id="switchIcon-right" style="color:white;width:32px"></i>
+    </div>
+    <div class="container-fluid" style="padding-top:30px;">
+        <h4>操作说明：</h4>
+        <div class="timeline-alt">
+            <div class="timeline-item">
+                <i class="mdi mdi-alpha-a bg-info-lighten text-info timeline-icon"></i>
+                <div class="timeline-item-info">
+                    <a href="#" class="text-info font-weight-bold mb-1 d-block">1ST Step</a>
+                    <small>点击导入数据，并在弹出的窗口中正确填入网点信息</small>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <i class="mdi mdi-alpha-b bg-primary-lighten text-primary timeline-icon"></i>
+                <div class="timeline-item-info">
+                    <a href="#" class="text-primary font-weight-bold mb-1 d-block">2ND Step</a>
+                    <small>在订单表中选择所要进行路线规划的订单</small>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <i class="mdi mdi-alpha-c bg-info-lighten text-info timeline-icon"></i>
+                <div class="timeline-item-info">
+                    <a href="#" class="text-info font-weight-bold mb-1 d-block">3RD Step</a>
+                    <small>在车辆表中选择配送的车辆，默认为选择的第一辆车</small>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <i class="mdi mdi-alpha-d bg-primary-lighten text-primary timeline-icon"></i>
+                <div class="timeline-item-info">
+                    <a href="#" class="text-primary font-weight-bold mb-1 d-block">4TH Step</a>
+                    <small>点击规划路径按钮，等待处理结果</small>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <i class="mdi mdi-alpha-e bg-info-lighten text-info timeline-icon"></i>
+                <div class="timeline-item-info">
+                    <a href="#" class="text-info font-weight-bold mb-1 d-block">5TH Step</a>
+                    <small>点击左侧查看按钮，可查看规划结果以及相关数据</small>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <i class="mdi mdi-alpha-f bg-primary-lighten text-primary timeline-icon"></i>
+                <div class="timeline-item-info">
+                    <a href="#" class="text-primary font-weight-bold mb-1 d-block">6TH Step</a>
+                    <small>地图可查看规划路径</small>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <i class="mdi mdi-alpha-g mdi-36px bg-info-lighten text-info timeline-icon"></i>
+                <div class="timeline-item-info">
+                    <a href="#" class="text-info font-weight-bold mb-1 d-block">7TH Step</a>
+                    <small>点击采用方案按钮，完成订单路径规划，并更新数据</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" style="height:75vh;">
+    <div class="col-lg-12">
+        <div class="row" style="height: 100% !important">
+            <div class="col-md-5" id="omess" style="padding:0 15px;box-sizing:border-box;height:100%;">
+                <div class="row datagroups">
+                    <div class="col-md-12 dataTable" id="dataTable1" style="height: 60% !important;">
+                        <table class="table dt-responsive nowrap table-sm" width="100%" style="font-size:12px">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>编号</th>
+                                    <th>时间</th>
+                                    <th>地址</th>
+                                    <th>到站</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    if (ViewBag.Data != null)
+                                    {
+                                        int flag1 = 1;
+                                        foreach (var item in ViewBag.Data)
+                                        {
+                                            <tr id="@string.Format("orderTr_{0}",flag1)">
+                                                <td id="@string.Format("orderId_{0}",flag1)">@item.OrderId</td>
+                                                <td>@item.Time</td>
+                                                <td>@item.SenderAddress</td>
+                                                <td>@item.ReceiverAddress</td>
+                                                <td>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input id="@string.Format("{0}/{1}/{2}/{3}/{4}/{5}/{6}",item.OrderId,item.Location,flag1,item.SenderAddress,item.CargoWeight,item.CargoVolume,item.UnitNUm)" class="custom-control-input" type="checkbox" />
+                                                        <label for="@string.Format("{0}/{1}/{2}/{3}/{4}/{5}/{6}",item.OrderId,item.Location,flag1,item.SenderAddress,item.CargoWeight,item.CargoVolume,item.UnitNUm)" class="custom-control-label" style="font-size:13px">
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            ++flag1;
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-12 dataTable" id="dataTable2" style="height: 40% !important;">
+                        <table class="table dt-responsive nowrap table-sm" width="100%" style="font-size:12px">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>车牌</th>
+                                    <th>载重（t）</th>
+                                    <th>容积（m<sup>3</sup>）</th>
+                                    <th>操作</th>
+                                    <th hidden></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    if (ViewBag.Trucks != null)
+                                    {
+                                        int flag2 = 0;
+                                        foreach (var item in ViewBag.Trucks)
+                                        {
+                                            <tr id="@string.Format("truckTr_{0}",item.TruckId)">
+                                                <td>@item.LicencePlate</td>
+                                                <td>@item.Load</td>
+                                                <td>@item.Volumn</td>
+                                                <td>
+                                                    <div class="custom-control custom-checkbox" style="">
+                                                        <input id="@string.Format("{0}/{1}",item.TruckId,flag2)" class="custom-control-input" type="checkbox" />
+                                                        <label for="@string.Format("{0}/{1}",item.TruckId,flag2)" class="custom-control-label" id="0" style="font-size:13px">
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td hidden>
+                                                    <input type="text" hidden id="@item.TruckId" value="@string.Format("{0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}/{8}",item.TruckSize,item.TruckWidth,item.TruckHeight,item.Load,item.TruckWeight,item.AxlesNum,item.PlateProvince,item.LicencePlate,item.Volumn)" />
+                                                </td>
+                                            </tr>
+                                            ++flag2;
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row footergroups">
+                    <div class="form-group col-md-12">
+                        <button class="btn btn-info btn-sm" type="button" id="getData" data-toggle="modal" data-target="#data-modal" style="margin-right:20px">导入数据</button>
+                        <button class="btn btn-info btn-sm" type="button" id="optimized" data-toggle="modal" data-target="#InfoTips-modal" style="margin-right:20px">规划路径</button>
+                        <button class="btn btn-info btn-sm" type="submit" id="makesure">采用方案</button>
+                    </div>
+                </div>
+                <div id="data-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+
+                                <div action="#" class="pl-3 pr-3">
+                                    <h3 class="text-center" style="margin-bottom:50px">范围认证</h3>
+                                    <div class="form-group mb-3">
+                                        <label for="owebsite">网点名称</label>
+                                        <select id="owebsite" class="custom-select">
+                                            @foreach (var item in ViewBag.WebSites)
+                                            {
+                                                <option value="@item.Name">@item.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label for="otype">规划类别</label>
+                                        <select id="otype" class="custom-select">
+                                            <option value="1">收货</option>
+                                            <option value="2">配送</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group text-center" style="margin-top:50px">
+                                        <button class="btn btn-rounded btn-primary" type="button" id="confirm">确 定</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="InfoTips-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-body p-4">
+                                <div class="text-center">
+                                    <h4 class="mt-2">消息提示</h4>
+                                    <p class="mt-3">数据处理中，请稍后...</p>
+                                    <p>
+                                        <div class="spinner-border text-info m-2"></div>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="ErrorTips-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content modal-filled bg-danger">
+                            <div class="modal-body p-4">
+                                <div class="text-center">
+                                    <i class="dripicons-wrong h1"></i>
+                                    <h4 class="mt-2">Error!</h4>
+                                    <p class="mt-3" id="ErrorMessage"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="text" id="location" value="@ViewBag.Location" hidden />
+            </div>
+            <div class="col-md-7" style="padding:0">
+                <div id="omap"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section style{
+    <style>
+        .form-group {
+            padding-left: 0 !important;
+        }
+
+        .footergroups {
+            height: 32px;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .datagroups {
+            width: 100%;
+            padding-bottom: 32px;
+            height: 100%;
+        }
+
+        td, th {
+            padding: 2px !important;
+            vertical-align: middle !important;
+        }
+
+        th {
+            color: white !important;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .dataTable {
+            overflow-y: scroll;
+            padding: 0 !important;
+        }
+
+        .left-side-menu {
+            display: none !important;
+        }
+
+        #otitle {
+            display: none !important;
+        }
+
+        .row {
+            width: 100% !important;
+            margin: 0 !important;
+        }
+
+        .content-page {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            height: 86vh;
+        }
+
+        .container-fluid {
+            width: 100%;
+        }
+
+        #omess {
+            width: 100%;
+            height: 100%;
+        }
+
+        #omap {
+            width: 100%;
+            height: 100%;
+        }
+
+        .card {
+            margin: 0 !important;
+            height: 100% !important;
+        }
+
+        .messageBox {
+            height: 100vh;
+            position: fixed;
+            top: 70px;
+            background-color: white;
+            z-index: 99 !important;
+            box-shadow: 0 0 35px 0 rgba(154,161,171,.15);
+        }
+
+        .messageBox-left {
+            width: 400px !important;
+            left: -400px;
+        }
+
+        .messageBox-right {
+            width: 300px !important;
+            right: 0px;
+        }
+
+        .switchBtn {
+            position: relative;
+            height: 80px;
+            width: 15px;
+            background-color: #15A3FA;
+            transform: translate(0,-50%);
+            transition: .3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 35px 0 rgba(154,161,171,.15);
+        }
+
+            .switchBtn:hover {
+                cursor: pointer;
+            }
+
+        .switchBtn-left {
+            top: 45%;
+            left: 100%;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .switchBtn-right {
+            top: 45%;
+            transform: translate(-50%,-50%);
+            right: 8px;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+
+        #section3 p {
+            margin-bottom: 5px;
+        }
+    </style>
+}
+
+@section scripts{
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=2e6c7ed51237b274c90ff217ea95e007"></script>
+    <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+    <script type="text/javascript">
+        var longtitude = 116.480983
+        var latitude = 39.989628
+        if ($('#location').val() != null && $('#location').val() != "") {
+            longtitude = parseFloat($('#location').val().split(',')[0])
+            latitude = parseFloat($('#location').val().split(',')[1])
+        }
+        var map = new AMap.Map('omap', {
+            resizeEnable: true,
+            center: [longtitude, latitude],
+            zoom: 13,
+            resizeEnable: true, //是否监控地图容器尺寸变化
+            mapStyle: "amap://styles/normal"
+        })
+
+        AMap.plugin('AMap.ToolBar', function () {
+            var toolbar = new AMap.ToolBar();
+            map.addControl(toolbar)
+        })
+
+        var startIcon = new AMap.Icon({
+            size: new AMap.Size(25, 34),
+            image: '//a.amap.com/jsapi_demos/static/demo-center/icons/dir-marker.png',
+            imageSize: new AMap.Size(135, 40),
+            imageOffset: new AMap.Pixel(-9, -3)
+        })
+
+        var middleIcon = new AMap.Icon({
+            size: new AMap.Size(25, 34),
+            image: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-red.png',
+            imageSize: new AMap.Size(135, 40),
+            imageOffset: new AMap.Pixel(-9, -3)
+        })
+
+        $('#optimized').click(function () {
+            var orderMap = new Map()//序号-location
+            var cargoDataMap = new Map()//货物信息map:编号/地址/重量/体积/件数
+            orderMap.set(0, longtitude + ',' + latitude)//起点
+
+
+            /*选择订单*/
+            var orderCheckboxLIst = $('#dataTable1').find("input[type='checkbox']")
+            var idPara = '0' //所选的订单序号，0为起点
+            for (var i = 0; i < orderCheckboxLIst.length; i++) {
+                var idArray = $(orderCheckboxLIst[i]).attr('id').split('/')
+                orderMap.set(i + 1, idArray[1])
+                cargoDataMap.set(i + 1, idArray[0] + '/' + idArray[3] + '/' + idArray[4] + '/' + idArray[5] + '/' + idArray[6])
+                if ($(orderCheckboxLIst[i]).is(':checked')) {
+                    var id = idArray[2]
+                    idPara = idPara + "/" + id
+                }
+            }
+            if (idPara == '0') {
+                alert('请先选择所要进行处理的订单！')
+                return false
+            }
+            else {
+                var fristOrderid = $(orderCheckboxLIst[0]).attr('id').split('/')[0]
+
+                /*选择货车*/
+                var truckList = $('#dataTable2').find("input[type='checkbox']")
+                var turck
+                var flag = 0
+                for (var i = 0; i < truckList.length; i++) {
+                    if ($(truckList[i]).is(':checked')) {
+                        truck = truckList[i]
+                        flag = 1
+                        break
+                    }
+                }
+                if (flag == 0) {
+                    alert('请选择车辆！')
+                    return false
+                }
+                else {
+                    var truckid = $(truck).attr('id').split('/')[0] //拿到选择的第一个货车的id
+
+
+                    var website = localStorage.getItem('websiteName')//网点的名称
+                    var type = localStorage.getItem('opType')//所选的类型
+                    if (idPara == '' || fristOrderid == '' || truckid == '' || website == '' || type == '' || idPara == null || fristOrderid == null || truckid == null || website == null || type == null)
+                        alert('请输入完整信息')
+                    else {
+                        var date = new Date()
+                        var timeStr = date.getFullYear() + '/' + date.getMonth() + '/' + date.getDay()
+                        $('#InfoTips-modal').modal('show')//打开模态框
+                        $.ajax({
+                            url: '/Staff/DynamicPathPlaning',
+                            data: { 'para': idPara, 'orderId': fristOrderid, 'truckId': truckid, 'name': website, 'type': type },
+                            type: 'GET',
+                            dataType: "json",
+                            success: function (data) {
+                                var opath = data.path
+                                var ovalue = data.maxValue
+                                var drawResult = DrawPath(orderMap, opath, truckid)
+                                if (drawResult) {
+                                    $('#InfoTips-modal').modal('hide')//关闭模态框
+
+                                    //设置信息
+                                    //根据返回的path,从cargoDataMap中拿到该订单的信息
+                                    let pathArray = opath.split('/')
+                                    let htmlStr
+                                    let counter = 1
+                                    let cv = 0.0, cw = 0.0 //货物总体积，总重量信息
+                                    for (var i = 0; i < pathArray.length; i++) {
+                                        htmlStr += '<tr>'
+                                        let data = cargoDataMap.get(parseInt(pathArray[i]))
+                                        let dataArray = data.split('/')
+                                        console.log(dataArray)
+                                        htmlStr += '<td>' + counter++ + '</td>';
+                                        htmlStr += '<td>' + dataArray[0] + '</td>';
+                                        htmlStr += '<td>' + dataArray[1] + '</td>';
+                                        htmlStr += '</tr>';
+                                        cw += parseFloat(dataArray[2]) * parseInt(dataArray[4])
+                                        cv += parseFloat(dataArray[3]) * parseInt(dataArray[4])
+                                    }
+                                    var truckData = $('#' + truckid).val()
+                                    var truckDataArray = truckData.split('/')
+                                    var vv = parseFloat(truckDataArray[8])
+                                    var vw = parseFloat(truckDataArray[3]) * 1000
+                                    $('#cargoW').html(cw.toFixed(4))
+                                    $('#cargoV').html(cv.toFixed(4))
+                                    $('#vehicleW').html(vw)
+                                    $('#vehicleV').html(vv)
+                                    $('#value').html(ovalue)
+                                    $('#vRate').html((cv / vv).toFixed(4))
+                                    $('#wRate').html((cw / vw).toFixed(4))
+                                    $('#opTime').html(timeStr)
+                                    $('#opPerson').html(localStorage.getItem('websiteName'))
+                                    $('#planningOrder').html(htmlStr)
+                                    $('#vehicle').html(truckDataArray[7])
+
+
+                                    localStorage.setItem('orderNum', opath)
+                                    localStorage.setItem('truckId', truckid)
+
+                                    //展开信息框
+                                    $('#messageBox-left').animate({ left: "0px" })
+                                    $(this).attr('id', '1')
+                                    $(this).attr('title', '点击展开结果')
+                                    $('#switchIcon-left').toggleClass('mdi-chevron-left')
+                                    $('#switchIcon-left').toggleClass('mdi-chevron-right')
+                                }
+                            },
+                            error: () => {
+                                console.log('error')
+                            }
+                        })
+                    }
+                }
+            }
+        })
+
+        function DrawPath(oMap, oPath, truckid) {
+            var truckData = $('#' + truckid).val()
+            var truckDataArray = truckData.split('/')
+
+            var pathArray = oPath.split('/')
+            var path = new Array()
+            path.push({ lnglat: [longtitude, latitude] })
+            for (var i = 0; i < pathArray.length; i++) {
+                var location = oMap.get(parseInt(pathArray[i]))
+                var longt = parseFloat(location.split(',')[0])
+                var lat = parseFloat(location.split(',')[1])
+                path.push({ lnglat: [longt, lat] })
+            }
+
+            var truckOptions = {
+                map: map,
+                policy: 3, // 规划策略
+                size: parseInt(truckDataArray[0]), // 车型大小
+                width: parseFloat(truckDataArray[1]), // 宽度
+                height: parseFloat(truckDataArray[2]), // 高度
+                load: parseFloat(truckDataArray[3]), // 载重
+                weight: parseFloat(truckDataArray[4]), // 自重
+                axlesNum: parseInt(truckDataArray[5]), // 轴数
+                province: truckDataArray[6], // 车辆牌照省份
+                showTraffic: true,
+                autoFitView: true
+                //number: Number((truckDataArray[7]).substring(2, truckDataArray[7].length))
+            }
+            var isSuccess = true
+
+            AMap.plugin('AMap.TruckDriving', function () {
+                var driving = new AMap.TruckDriving(truckOptions)
+                driving.search(path, function (status, result) {
+                    if (status === 'complete') {
+                        if (result.routes && result.routes.length) {
+                            drawRoute(result.routes[0])
+                        }
+                    } else {
+                        console.log(result)
+                        isSuccess = false
+                    }
+                })
+            })
+            return isSuccess
+        }
+
+        function drawRoute(route) {
+            var path = parseRouteToPath(route)
+
+            var startMarker = new AMap.Marker({
+                position: path[0],
+                icon: 'https://webapi.amap.com/theme/v1.3/markers/n/start.png',
+                map: map
+            })
+
+            var endMarker = new AMap.Marker({
+                position: path[path.length - 1],
+                icon: 'https://webapi.amap.com/theme/v1.3/markers/n/end.png',
+                map: map
+            })
+
+            var routeLine = new AMap.Polyline({
+                path: path,
+                isOutline: true,
+                outlineColor: '#ffeeee',
+                borderWeight: 2,
+                strokeWeight: 5,
+                strokeColor: '#0091ff',
+                lineJoin: 'round'
+            })
+
+            routeLine.setMap(map)
+
+            // 调整视野达到最佳显示区域
+            map.setFitView([startMarker, endMarker, routeLine])
+        }
+
+        function parseRouteToPath(route) {
+            var path = []
+
+            for (var i = 0, l = route.steps.length; i < l; i++) {
+                var step = route.steps[i]
+
+                for (var j = 0, n = step.path.length; j < n; j++) {
+                    path.push(step.path[j])
+                }
+            }
+            return path
+        }
+
+    </script>
+
+    <script type="text/javascript" src="https://webapi.amap.com/demos/js/liteToolbar.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+
+        $('#confirm').click(function () {
+            var website = $('#owebsite').val()
+            var type = $('#otype').val()
+            if (website != null && website != '') {
+                $('#login-modal').modal('hide')
+                localStorage.setItem('websiteName', website)
+                localStorage.setItem('opType', type)
+                location.replace('/Staff/GetGoods?name=' + website + "&type=" + type)
+
+            } else {
+                alert("请输入网点名称！")
+            }
+        })
+
+        $('.switchBtn-left').click(function () {
+            //关闭状态
+            if ($(this).attr('id') == '0') {
+                $('#messageBox-left').animate({ left: "0px" })
+                $(this).attr('id', '1')
+                $(this).attr('title', '点击展开结果')
+                $('#switchIcon-left').toggleClass('mdi-chevron-left')
+                $('#switchIcon-left').toggleClass('mdi-chevron-right')
+            } else {
+                $('#messageBox-left').animate({ left: "-400px" })
+                $(this).attr('id', '0')
+                $(this).attr('title', '点击关闭结果')
+                $('#switchIcon-left').toggleClass('mdi-chevron-left')
+                $('#switchIcon-left').toggleClass('mdi-chevron-right')
+            }
+        })
+
+        $('.switchBtn-right').click(function () {
+            //关闭状态
+            if ($(this).attr('id') == '0') {
+                $('#messageBox-right').animate({ right: "0px" })
+                $(this).attr('id', '1')
+                $(this).attr('title', '点击展开结果')
+                $('#switchIcon-right').toggleClass('mdi-chevron-right')
+                $('#switchIcon-right').toggleClass('mdi-chevron-left')
+            } else {
+                $('#messageBox-right').animate({ right: "-300px" })
+                $(this).attr('id', '0')
+                $(this).attr('title', '点击关闭结果')
+                $('#switchIcon-right').toggleClass('mdi-chevron-right')
+                $('#switchIcon-right').toggleClass('mdi-chevron-left')
+            }
+        })
+
+        $('#makesure').click(function () {
+            var orderNum = localStorage.getItem('orderNum')
+            var truckId = localStorage.getItem('truckId')
+            var type = localStorage.getItem('opType')
+            var website = localStorage.getItem('websiteName')
+            if (orderNum == null || truckId == null) {
+                console.log('粗错了！')
+                return false;
+            }
+            else {
+                console.log('好像没有错误！')
+                var orderIdStr = ''
+                var orderList = orderNum.split('/')
+                for (var i = 0; i < orderList.length; i++) {
+                    orderIdStr += $('#orderId_' + orderList[i]).html() + "/"
+                }
+                $.ajax({
+                    url: "/Staff/ModifyOrderStatus",
+                    data: { 'oids': orderIdStr, 'tid': truckId, 'tp': type },
+                    type: "GET",
+                    success: (data) => {
+                        if (data.status == "complete") {
+                            alert("成功！")
+                            location.reload()
+                        }
+                        else
+                            alert("失败！")
+                    }, error: () => {
+                        alert("失败！")
+                    }
+                })
+            }
+        })
+    </script>
+}
