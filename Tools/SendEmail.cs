@@ -15,9 +15,9 @@ namespace LogisticsSystem.Tools
                 Port = 25,//通过网络发送到SMTP服务器
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 //发件人登录邮箱的用户名和密码
-                Credentials = new NetworkCredential("1692932745", "vsdnbckpqvljchhf")
+                Credentials = new NetworkCredential("your email", "your scret code")
             };
-            MailAddress fromAddress = new MailAddress("1692932745@qq.com", "Maverick");
+            MailAddress fromAddress = new MailAddress("your email", "title");
             MailAddress toAddress = new MailAddress(receiverEmail, "user");
             MailMessage mailMessage = new MailMessage(fromAddress, toAddress);
             mailMessage.Subject = "Maverick系统验证码";//邮件标题
